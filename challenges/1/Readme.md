@@ -17,3 +17,6 @@ You can use React (NextJS) or VueJS (Nuxtjs) as you wish.
 - SCSS
 - Adobe XD
 
+# Preview
+
+![Preview](https://raw.githubusercontent.com/dnj/frontend-recruitment/master/challenges/1/design/blog-post.png)
