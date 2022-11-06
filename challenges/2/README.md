@@ -44,7 +44,7 @@ So basically it's how to call your component:
 </div>
 ```
 
-We (as testers and users of your code) guarantee that all input `ITimeRange.end < ITimeRange.start` so you don't have to get involved with prop validation.
+We (as testers and users of your code) guarantee that all input `ITimeRange.end > ITimeRange.start` so you don't have to get involved with prop validation.
 
 ## Steps
 1. Fork this repo on your Github account.
