@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import Clock from '../components/Clock'
 
-export default function Home() {
+export default function ActiveHours() {
   return (
     <div className={styles.container}>
       <Head>
@@ -11,9 +12,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        
+        <Clock activeHours={[{start: 5, end: 13}, {start: 22, end: 24}]}/>
       </main>
-
     </div>
   )
 }
