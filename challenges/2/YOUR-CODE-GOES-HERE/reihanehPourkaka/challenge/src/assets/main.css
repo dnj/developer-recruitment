@@ -1,0 +1,19 @@
+@import './base.css';
+
+@font-face {
+  font-family: 'Shabnam';
+  src: url('src/assets/fonts/Shabnam/Shabnam-FD.eot') format("eot"),
+  url('src/assets/fonts/Shabnam/Shabnam-FD.woff') format("woff");
+
+}
+
+#app {
+  font-family: Shabnam;
+  display: flex;
+  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem ;
+  font-weight: normal;
+}
+
