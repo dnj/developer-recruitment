@@ -1,6 +1,6 @@
-import styles from '../styles/Clock.module.css';
 import { useEffect, useRef } from 'react';
 import { IProps } from '../types';
+import styles from '../styles/Clock.module.css';
 
 
 export default function Clock(props: IProps) {    
