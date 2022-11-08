@@ -13,7 +13,6 @@ const getQuarterHourStyle = (i) => {
   return `transform: rotate(${15 * i}deg)`
 }
 const getTimesStyle = (hours) => {
-  console.log(hours)
   if (hours.start < 1 || hours.end > 24) {
     errors.value = 'زمان انتخابی صحیح نمی باشد'
     return
