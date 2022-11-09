@@ -7,7 +7,7 @@ import Clock from './components/Clock.vue'
 
 <template>
   <div class="container">
-    <Clock :activeHours='[{start: 5, end: 13}, {start: 22, end: 24}]'/>
+    <Clock :activeHours='[{start: 2, end: 4}, {start: 15, end: 22} , {start: 6, end: 9} ]'/>
   </div>
 </template>
 

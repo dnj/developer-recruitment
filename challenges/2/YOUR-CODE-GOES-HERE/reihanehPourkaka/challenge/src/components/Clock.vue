@@ -1,51 +1,53 @@
 <script setup>
-import { ref} from "vue";
+import {computed, ref, watch} from "vue";
 
 const timeRange = ref({
   start: Number,
-  end:Number
+  end: Number
 });
 
 const props = defineProps(['activeHours'])
 const checkValid = () => {
   timeRange.value = props.activeHours;
-  if( timeRange.value.start < 0  )  timeRange.value.start = 0;
-  if( timeRange.value.start > 24)  timeRange.value.end = 24;
+  if (timeRange.value.start < 0) timeRange.value.start = 0;
+  if (timeRange.value.start > 24) timeRange.value.end = 24;
 };
 checkValid();
-
+watch(props, (newVal ) => {
+  checkValid(newVal)
+})
 </script>
 
 <template>
 
-    <div class="timeRange"
-         v-for="(activeHour,index) in timeRange"
-         :key="index"
-         :style="{backgroundImage : 'conic-gradient(rgb(255 255 255 / 0%)  00deg  , rgb(255 255 255 / 0%) '+activeHour.start *15+'deg ,#ee7e25  '+activeHour.start *15+'deg  , #ee7e25  '+activeHour.end *15+'deg,rgb(255 255 255 / 0%)'+activeHour.end *15+'deg  , rgb(255 255 255 / 0%) 360deg)' }"
-    >
+  <div class="timeRange"
+       v-for="(activeHour,index) in timeRange"
+       :key="index"
+       :style="{backgroundImage : 'conic-gradient(  rgb(255 255 255 / 0%) '+activeHour.start *15+'deg ,#ee7e25  '+activeHour.start *15+'deg  , #ee7e25  '+activeHour.end *15+'deg,rgb(255 255 255 / 0%)'+activeHour.end *15+'deg  ' }"
+  >
 
-    </div>
-    <div class="clock">
+  </div>
+  <div class="clock">
+    <div
+        class="degreeClock"
+        v-for="i in 24"
+        :key="i"
+        :style="{ transform: 'rotate('+15*i + 'deg)'}"
+    >
       <div
-          class="degreeClock"
-          v-for="i in 24"
-          :key="i"
-          :style="{ transform: 'rotate('+15*i + 'deg)'}"
+          class="lines"
+          v-show="i % 6 !== 0"
+      ></div>
+      <span
+          class="number"
+          v-show="i% 6 === 0"
+          :style="{ transform: 'rotate('+ -15*i + 'deg)'}"
       >
-        <div
-            class="lines"
-            v-show="i % 6 !== 0"
-        ></div>
-        <span
-            class="number"
-            v-show="i% 6 === 0"
-            :style="{ transform: 'rotate('+ -15*i + 'deg)'}"
-        >
           {{ i === 24 ? "00" : i < 10 ? "0" + i : i }}
           </span>
-      </div>
-
     </div>
+
+  </div>
 
 </template>
 
