@@ -1,0 +1,73 @@
+@import "./base.scss";
+#app {
+  font-family: IRANSans;
+  font-weight: normal;
+}
+.app-timer {
+  margin: 0px auto;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  .error {
+    text-align: center;
+    color: red;
+    margin-top: 50px;
+  }
+}
+.app-timer__hours{
+  width: 310x;
+  position: absolute;
+  height: 321px;
+  width: 320px;
+  border-radius: 50%;
+}
+.app-clock {
+  background: #fff;
+  width: 300px;
+  height: 300px;
+  margin: 8% auto 0;
+  border-radius: 50%;
+  position: relative;
+  top: 11px;
+  right: -11px;
+  box-shadow: 0px 4px 46px -12px rgb(0 0 0 / 10%);
+  span {
+    display: inline-block;
+    position: absolute;
+    color: #333;
+    font-size: 22px;
+    font-weight: 700;
+    z-index: 4;
+  }
+  
+  .h24 {
+    top: 5px;
+    left: 50%;
+    margin-left: -9px;
+  }
+  .h6 {
+    top: 140px;
+    right: 5px;
+  }
+  .h12 {
+    bottom: 5px;
+    left: 50%;
+    margin-left: -10px;
+  }
+  .h18 {
+    left: 5px;
+    top: 140px;
+  }
+  
+  .quarterhour {
+    position: absolute;
+    z-index: 2;
+    width: 3px;
+    height: 10px;
+    background: #000;
+    left: 50%;
+    margin-left: -1px;
+    transform-origin: 50% 150px;
+  }
+  
+}
