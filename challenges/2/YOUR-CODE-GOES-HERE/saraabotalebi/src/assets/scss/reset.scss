@@ -1,0 +1,26 @@
+@font-face {
+    font-family: vazirRegular;
+    src: url('./../fonts/font-vazir/Vazir-Regular/Vazir-Regular-FD.eot');
+    src: url('./../fonts/font-vazir/Vazir-Regular/Vazir-Regular-FD.eot?#iefix') format('embedded-opentype'), 
+    url('./../fonts/font-vazir/Vazir-Regular/Vazir-Regular-FD.woff2') format('woff2'), 
+    url('./../fonts/font-vazir/Vazir-Regular/Vazir-Regular-FD.woff') format('woff'), 
+    url('./../fonts/font-vazir/Vazir-Regular/Vazir-Regular-FD.ttf') format('truetype');
+}
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html,body{
+    width : 100%;
+    overflow-x: hidden;
+}
+html{
+    font-size : 62.5%;
+    scroll-behavior: smooth;
+}
+body{
+    font-family : vazirRegular;
+    font-size : 1.8rem;
+    direction : rtl;
+}
