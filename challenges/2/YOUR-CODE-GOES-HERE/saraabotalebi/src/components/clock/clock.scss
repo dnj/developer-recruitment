@@ -1,0 +1,63 @@
+.clock{
+    width : 30rem;
+    height : 30rem;
+    border-radius : 50%;
+    box-shadow: 0 0 10px 1px rgb(226, 226, 226);
+    background-color: #fff;
+    padding :1.2rem;
+    position : relative;
+    .outerClockFace{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        .hour-00,
+        .hour-06,
+        .hour-12,
+        .hour-18{
+            position: absolute;
+            color : #000;
+            z-index : 2;
+    
+        }
+        .hour-00{
+            top : -3%;
+            left : 50%;
+            transform: translateX(-50%);
+        }
+        .hour-06{
+            top : 50%;
+            right : -1%;
+            transform: translateY(-50%)
+        }
+        .hour-12{
+            bottom : -4%;
+            left : 50%;
+            transform : translateX(-50%)
+        }
+        .hour-18{
+            top : 50%;
+            left : -1%;
+            transform: translateY(-50%);
+        }
+        .symbol-hour{
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #000;
+            left: 50%;
+        }
+    }
+    .innerClockFace{
+        position: absolute;
+        top: 6%;
+        left: 6%;
+        width: 88%;
+        height: 88%;
+        background: #fff;
+        border-radius: 50%;
+        z-index: 1;
+    }    
+}
+
+
