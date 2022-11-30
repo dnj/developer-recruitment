@@ -3,7 +3,7 @@
 The goal is to implement a 24-hour clock component with VueJS and/or ReactJS which have some additional curves around it.
 
 <p align="center">
-  <img width="201" height="201" alt="Clock" src="https://raw.githubusercontent.com/dnj/frontend-recruitment/master/challenges/2/design/clock.png">
+  <img width="201" height="201" alt="Clock" src="https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/2/design/clock.png">
 </p>
 
 This clock is a part of a timer UI and supposed to show user when the timer is active and when it's not.
@@ -22,7 +22,7 @@ Real technical challenge is to use no images, no canvas and ideally no SVGs. Jus
 The clock is 24-hour. We prefer you do not use any images or canvas but if it's difficult to draw a curve around the clock it's ok to use SVG for that part.
 
 <p align="center">
-  <img width="339" height="296" alt="Clock Explained" src="https://raw.githubusercontent.com/dnj/frontend-recruitment/master/challenges/2/design/clock-explained.jpg">
+  <img width="339" height="296" alt="Clock Explained" src="https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/2/design/clock-explained.jpg">
 </p>
 
 The component accepts a prop for active hours in this format:

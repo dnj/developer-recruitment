@@ -19,4 +19,4 @@ You can use React (NextJS) or VueJS (Nuxtjs) as you wish.
 
 # Preview
 
-![Preview](https://raw.githubusercontent.com/dnj/frontend-recruitment/master/challenges/1/design/blog-post.png)
+![Preview](https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/1/design/blog-post.png)
