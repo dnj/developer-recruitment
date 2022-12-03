@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TravelStatus;
 use App\Models\Travel;
 use App\Http\Requests\TravelStoreRequest;
+use Illuminate\Http\Request;
 
 class TravelController extends Controller
 {
@@ -46,8 +47,31 @@ class TravelController extends Controller
         ], 201);
 	}
 
-	public function cancel()
+	public function cancel(int $travel)
 	{
+        $travel = Travel::query()->where('id', $travel)->first();
+
+        if($travel) {
+            if(in_array($travel->status, [
+                TravelStatus::CANCELLED,
+                TravelStatus::DONE
+            ])) {
+                return response()->json([
+                    'code' => 'CannotCancelFinishedTravel'
+                ], 400);
+            } else {
+                $travel->status = TravelStatus::CANCELLED->value;
+                $travel->save();
+
+                return response()->json([
+                    'travel' => $travel
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 
 	public function passengerOnBoard()

@@ -345,7 +345,7 @@ class TravelControllerTest extends TestCase
             ->withDriver($driver)
             ->running()
             ->create();
-        
+
         $travel = Travel::factory()->searchingForDriver()->create();
 
         Sanctum::actingAs($driver->user);
