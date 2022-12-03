@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TravelStatus;
 use App\Models\Travel;
-use Illuminate\Http\Request;
+use App\Http\Requests\TravelStoreRequest;
 
 class TravelController extends Controller
 {
@@ -13,7 +13,7 @@ class TravelController extends Controller
 	{
 	}
 
-	public function store(Request $request)
+	public function store(TravelStoreRequest $request)
 	{
         $travel = new Travel;
 
