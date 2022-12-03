@@ -3,7 +3,7 @@
 The objective of this challenge is to build a remote control UI for a table fan.
 
 <p align="center">
-	<img width="256" alt="Fan UI Design" src="https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/3/design/dashboard.png">
+	<img width="256" alt="Fan UI Design" src="https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/4/design/dashboard.png">
 </p>
 
 
