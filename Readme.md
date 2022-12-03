@@ -12,6 +12,7 @@ Choose your challenge or challenges will choose you!
 - [First Challenge (Front-End)](https://github.com/dnj/frontend-recruitment/blob/master/challenges/1)
 - [Second Challenge (Front-End)](https://github.com/dnj/frontend-recruitment/blob/master/challenges/2)
 - [Third Challenge (Backend-End)](https://github.com/dnj/frontend-recruitment/blob/master/challenges/3)
+- [Forth Challenge (Front-End)](https://github.com/dnj/frontend-recruitment/blob/master/challenges/4)
 
 Follow the instructions on each and send us a PR; after that please be available for further contacts by phone and github.
 
