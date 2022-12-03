@@ -16,17 +16,17 @@ This UI implemented as mobile application and communicates by a restful API to a
 In this page the user can:
 
 ### Power on/off device:
-When user power on the fans, blades must rotate and head of fan must oscillate.
-When user power off device, all animations must be stop.
+When user powers on the fan, blades must rotate and head of fan must oscillate.
+When user powers off device, all animations must be stop.
 
 ### Control speed of blades:
-Speed of blades must control by a range slider and effact on screen animation.
+Speed of blades must control by a range slider and apply on screen animation.
 
 ### Set a mode for rotating blades:
-There are 4 mode for rotating of blades and based on user selecion must effact on screen animation.
+There are 4 mode for rotating of blades and based on user selecion must apply on screen animation.
 - Normal: use `linear` as `animation-timing-function`
 - Oceanic: use `ease-in-out` as `animation-timing-function`
-- Tropical: use `ease-in-out` as `animation-timing-function`
+- Tropical: use `ease` as `animation-timing-function`
 - Woodsy: use `cubic-bezier(0.5,0.36,0.55,0.84)` as `animation-timing-function`
 
 ### Turn on/off oscillating:
@@ -37,6 +37,7 @@ When user turn on oscillating this cause rotating the head of fan:
 	<img width="486" height="192" alt="Oscillating Head" src="https://raw.githubusercontent.com/dnj/developer-recruitment/master/challenges/4/design/oscillating.webp">
 </p>
 
+And obviously it should rotate when it's off.
 
 # Steps
 1. Fork this repo on your Github account.
