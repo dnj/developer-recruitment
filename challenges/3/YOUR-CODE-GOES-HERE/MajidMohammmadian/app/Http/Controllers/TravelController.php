@@ -15,6 +15,13 @@ class TravelController extends Controller
 
 	public function store(TravelStoreRequest $request)
 	{
+        $exist_active_travel = Travel::userHasActiveTravel(auth()->user());
+        if($exist_active_travel) {
+            return response()->json([
+                'code' => 'ActiveTravel'
+            ], 400);
+        }
+
         $travel = new Travel;
 
         $travel->passenger_id = auth()->id();

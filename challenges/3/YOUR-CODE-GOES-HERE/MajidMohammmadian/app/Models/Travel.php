@@ -6,12 +6,13 @@ use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class Travel extends Model
 {
     use HasFactory;
 
-    public static function userHasActiveTravel(User $user): bool {
+    public static function userHasActiveTravel(User|Authenticatable $user): bool {
         return self::query()
             ->whereIn("status", [TravelStatus::RUNNING, TravelStatus::SEARCHING_FOR_DRIVER])
             ->where(function ($q) use ($user) {
