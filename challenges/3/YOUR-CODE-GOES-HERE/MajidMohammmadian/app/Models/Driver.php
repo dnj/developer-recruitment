@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use App\Enums\DriverStatus;
+use App\Enums\TravelStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class Driver extends Model
 {
     use HasFactory;
 
-    public static function byUser(User $user): self
+    public static function byUser(User|Authenticatable $user): self
     {
         return self::query()->findOrFail($user->id);
     }

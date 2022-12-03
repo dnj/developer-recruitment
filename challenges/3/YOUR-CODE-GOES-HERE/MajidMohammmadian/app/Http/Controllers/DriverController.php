@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DriverStatus;
+use App\Enums\TravelStatus;
+use App\Http\Requests\DriverSignupRequest;
 use App\Http\Resources\DriverResource;
 use App\Models\Driver;
-use App\Http\Requests\DriverSignupRequest;
+use App\Models\Travel;
+use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
@@ -16,7 +19,7 @@ class DriverController extends Controller
             'car_model' => $request->car_model,
         ])->exists();
 
-        if($driver_exist) {
+        if ($driver_exist) {
             return response()->json([
                 'code' => 'AlreadyDriver'
             ], 400);
@@ -34,7 +37,21 @@ class DriverController extends Controller
         return response()->json(DriverResource::make($driver));
     }
 
-    public function update()
+    public function update(Request $request)
     {
+        $driver = Driver::byUser(auth()->user())->first();
+
+        $driver->latitude = $request->latitude;
+        $driver->longitude = $request->longitude;
+        $driver->status = $request->status;
+
+        $driver->save();
+
+        $travels = Travel::query()->with('spots')->where('status', TravelStatus::SEARCHING_FOR_DRIVER->value)->get();
+
+        return response()->json([
+            'driver'  => $request->all(),
+            'travels' => $travels
+        ]);
     }
 }
