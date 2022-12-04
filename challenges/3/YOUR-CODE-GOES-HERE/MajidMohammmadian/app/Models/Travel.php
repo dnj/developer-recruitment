@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 
+/**
+ * @property mixed id
+ * @property mixed passenger_id
+ * @property mixed driver_id
+ * @property mixed status
+ */
 class Travel extends Model
 {
     use HasFactory;
