@@ -103,6 +103,12 @@ class TravelController extends Controller
         $travel = $query->first();
 
         if($travel instanceof Travel) {
+            if($travel->passenger_id == auth()->id()) {
+                return response()->json([
+                    'code' => 'Forbidden'
+                ], 403);
+            }
+
             $found = false;
             foreach ($travel->events as $e) {
                 if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
