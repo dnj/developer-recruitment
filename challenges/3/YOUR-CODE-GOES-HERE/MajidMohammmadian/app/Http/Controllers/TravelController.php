@@ -109,6 +109,12 @@ class TravelController extends Controller
                 ], 403);
             }
 
+            if(!$travel->driverHasArrivedToOrigin()) {
+                return response()->json([
+                    'code' => 'CarDoesNotArrivedAtOrigin'
+                ], 400);
+            }
+
             $found = false;
             foreach ($travel->events as $e) {
                 if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
