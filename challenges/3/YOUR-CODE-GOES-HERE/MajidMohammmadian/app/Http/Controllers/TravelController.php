@@ -191,7 +191,31 @@ class TravelController extends Controller
         }
 	}
 
-	public function take()
+	public function take(int $travel)
 	{
+        $query = Travel::query()->with('events')->where('id', $travel);
+
+        $travel = $query->first();
+
+        if($travel instanceof Travel) {
+            $travel->driver_id = auth()->id();
+            $travel->save();
+
+            $travel->events()->create([
+                'type' => TravelEventType::ACCEPT_BY_DRIVER->value
+            ]);
+
+            return response()->json([
+                'travel' => collect($travel->toArray())->filter(function (){
+                    return [
+                        'id', 'driver_id', 'status'
+                    ];
+                })
+            ]);
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 }
