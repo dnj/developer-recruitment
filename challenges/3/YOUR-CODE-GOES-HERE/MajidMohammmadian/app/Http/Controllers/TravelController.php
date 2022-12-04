@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
+use App\Exceptions\ActiveTravelException;
+use App\Exceptions\AllSpotsDidNotPassException;
+use App\Exceptions\CannotCancelFinishedTravelException;
+use App\Exceptions\CannotCancelRunningTravelException;
+use App\Exceptions\CarDoesNotArrivedAtOriginException;
+use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Models\Travel;
 use App\Http\Requests\TravelStoreRequest;
 use App\Models\TravelEvent;
@@ -24,9 +30,7 @@ class TravelController extends Controller
 	{
         $exist_active_travel = Travel::userHasActiveTravel(auth()->user());
         if($exist_active_travel) {
-            return response()->json([
-                'code' => 'ActiveTravel'
-            ], 400);
+            throw new ActiveTravelException();
         }
 
         $travel = new Travel;
@@ -59,15 +63,11 @@ class TravelController extends Controller
             TravelStatus::CANCELLED,
             TravelStatus::DONE
         ])) {
-            return response()->json([
-                'code' => 'CannotCancelFinishedTravel'
-            ], 400);
+            throw new CannotCancelFinishedTravelException();
         } else {
             if($travel->status == TravelStatus::RUNNING) {
                 if($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id())) {
-                    return response()->json([
-                        'code' => 'CannotCancelRunningTravel'
-                    ], 400);
+                    throw new CannotCancelRunningTravelException();
                 }
             }
 
@@ -92,9 +92,7 @@ class TravelController extends Controller
             }
 
             if(!$travel->driverHasArrivedToOrigin()) {
-                return response()->json([
-                    'code' => 'CarDoesNotArrivedAtOrigin'
-                ], 400);
+                throw new CarDoesNotArrivedAtOriginException();
             }
 
             $found = false;
@@ -106,9 +104,7 @@ class TravelController extends Controller
             }
 
             if($found || ($travel->status == TravelStatus::DONE)) {
-                return response()->json([
-                    'code' => 'InvalidTravelStatusForThisAction'
-                ], 400);
+                throw new InvalidTravelStatusForThisActionException();
             }
 
             $travel->events()->create([
@@ -135,15 +131,11 @@ class TravelController extends Controller
 
         if($travel instanceof Travel) {
             if($travel->passenger_id == auth()->id()) {
-                return response()->json([
-                    'code' => 'Forbidden'
-                ], 403);
+                abort(403);
             }
 
             if($travel->status == TravelStatus::DONE) {
-                return response()->json([
-                    'code' => 'InvalidTravelStatusForThisAction'
-                ], 400);
+                throw new InvalidTravelStatusForThisActionException();
             }
 
             if($travel->allSpotsPassed()) {
@@ -162,9 +154,7 @@ class TravelController extends Controller
                     ]);
                 }
             } else {
-                return response()->json([
-                    'code' => 'AllSpotsDidNotPass'
-                ], 400);
+                throw new AllSpotsDidNotPassException();
             }
         } else {
             return response()->json([
@@ -176,15 +166,11 @@ class TravelController extends Controller
 	public function take(Travel $travel)
 	{
         if(Travel::userHasActiveTravel(auth()->user())) {
-            return response()->json([
-                'code' => 'ActiveTravel'
-            ], 400);
+            throw new ActiveTravelException();
         }
 
         if($travel->status == TravelStatus::CANCELLED) {
-            return response()->json([
-                'code' => 'InvalidTravelStatusForThisAction'
-            ], 400);
+            throw new InvalidTravelStatusForThisActionException();
         }
 
         $travel->driver_id = auth()->id();

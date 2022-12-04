@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TravelStatus;
+use App\Exceptions\InvalidTravelStatusForThisActionException;
+use App\Exceptions\SpotAlreadyPassedException;
 use App\Models\Travel;
 use Carbon\Carbon;
 use App\Http\Requests\TravelSpotStoreRequest;
@@ -21,9 +23,7 @@ class TravelSpotController extends Controller
             }
 
             if($travel->status == TravelStatus::CANCELLED) {
-                return response()->json([
-                    'code' => 'InvalidTravelStatusForThisAction'
-                ], 400);
+                throw new InvalidTravelStatusForThisActionException();
             }
 
             $travel_arrived_exist = $travel->spots()->where('position', 0)->whereNotNull('arrived_at')->exists();
@@ -33,9 +33,7 @@ class TravelSpotController extends Controller
             }
 
             if($travel_arrived_exist) {
-                return response()->json([
-                    'code' => 'SpotAlreadyPassed'
-                ], 400);
+                throw new SpotAlreadyPassedException();
             }
 
             $travel->spots()->where('position', 0)->update([
@@ -66,9 +64,7 @@ class TravelSpotController extends Controller
             }
 
             if($travel->status == TravelStatus::CANCELLED) {
-                return response([
-                    'code' => 'InvalidTravelStatusForThisAction'
-                ], 400);
+                throw new InvalidTravelStatusForThisActionException();
             }
 
             foreach ($travel->spots as $item) {
@@ -76,9 +72,7 @@ class TravelSpotController extends Controller
                     if(is_null($item->arrived_at)) {
                         $travel->spots()->where('position', $request->position)->increment('position');
                     } else {
-                        return response()->json([
-                            'code' => 'SpotAlreadyPassed'
-                        ], 400);
+                        throw new SpotAlreadyPassedException();
                     }
                 }
             }
