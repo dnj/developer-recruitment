@@ -123,7 +123,7 @@ class TravelController extends Controller
                 }
             }
 
-            if($found) {
+            if($found || ($travel->status == TravelStatus::DONE)) {
                 return response()->json([
                     'code' => 'InvalidTravelStatusForThisAction'
                 ], 400);
