@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Models\Travel;
 use App\Http\Requests\TravelStoreRequest;
@@ -10,7 +11,6 @@ use Illuminate\Http\Request;
 
 class TravelController extends Controller
 {
-
 	public function view(int $travel)
 	{
         $travel = Travel::query()->where('id', $travel)->first();
@@ -80,8 +80,6 @@ class TravelController extends Controller
                             'code' => 'CannotCancelRunningTravel'
                         ], 400);
                     }
-
-
                 }
 
                 $travel->status = TravelStatus::CANCELLED->value;
@@ -98,8 +96,41 @@ class TravelController extends Controller
         }
 	}
 
-	public function passengerOnBoard()
+	public function passengerOnBoard(int $travel)
 	{
+        $query = Travel::query()->with('events')->where('id', $travel);
+
+        $travel = $query->first();
+
+        if($travel instanceof Travel) {
+            $found = false;
+            foreach ($travel->events as $e) {
+                if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if($found) {
+                return response()->json([
+                    'code' => 'InvalidTravelStatusForThisAction'
+                ], 400);
+            }
+
+            $travel->events()->create([
+                'type' => TravelEventType::PASSENGER_ONBOARD->value
+            ]);
+
+            $travel = $query->first();
+
+            return response()->json([
+                'travel' => $travel->toArray()
+            ]);
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 
 	public function done()

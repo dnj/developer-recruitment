@@ -12,6 +12,7 @@ class TravelEvent extends Model
 
     use HasFactory;
 
+    protected $guarded;
     protected $table = "travels_events";
     protected $casts = array(
         'type' => TravelEventType::class,
