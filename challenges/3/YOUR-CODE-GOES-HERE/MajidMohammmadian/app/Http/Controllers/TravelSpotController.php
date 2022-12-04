@@ -14,6 +14,10 @@ class TravelSpotController extends Controller
         $travel = $query->first();
 
         if($travel instanceof Travel) {
+            if($travel->passenger_id == auth()->id()) {
+                abort(403);
+            }
+
             $travel_arrived_exist = $travel->spots()->where('position', 0)->whereNotNull('arrived_at')->exists();
 
             if($travel_arrived_exist) {
