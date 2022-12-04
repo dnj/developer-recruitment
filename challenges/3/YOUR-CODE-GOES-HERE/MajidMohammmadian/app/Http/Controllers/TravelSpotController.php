@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TravelStatus;
 use App\Models\Travel;
 use Carbon\Carbon;
 
@@ -16,6 +17,12 @@ class TravelSpotController extends Controller
         if($travel instanceof Travel) {
             if($travel->passenger_id == auth()->id()) {
                 abort(403);
+            }
+
+            if($travel->status == TravelStatus::CANCELLED) {
+                return response()->json([
+                    'code' => 'InvalidTravelStatusForThisAction'
+                ], 400);
             }
 
             $travel_arrived_exist = $travel->spots()->where('position', 0)->whereNotNull('arrived_at')->exists();
