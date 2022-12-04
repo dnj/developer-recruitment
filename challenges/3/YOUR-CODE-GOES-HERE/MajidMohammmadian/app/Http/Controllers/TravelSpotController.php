@@ -67,7 +67,13 @@ class TravelSpotController extends Controller
 
             foreach ($travel->spots as $item) {
                 if($item->position >= $request->position) {
-                    $travel->spots()->where('position', $request->position)->increment('position');
+                    if(is_null($item->arrived_at)) {
+                        $travel->spots()->where('position', $request->position)->increment('position');
+                    } else {
+                        return response()->json([
+                            'code' => 'SpotAlreadyPassed'
+                        ], 400);
+                    }
                 }
             }
             $travel->spots()->create($request->toArray());
