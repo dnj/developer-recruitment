@@ -65,6 +65,12 @@ class TravelSpotController extends Controller
                 abort(403);
             }
 
+            if($travel->status == TravelStatus::CANCELLED) {
+                return response([
+                    'code' => 'InvalidTravelStatusForThisAction'
+                ], 400);
+            }
+
             foreach ($travel->spots as $item) {
                 if($item->position >= $request->position) {
                     if(is_null($item->arrived_at)) {
