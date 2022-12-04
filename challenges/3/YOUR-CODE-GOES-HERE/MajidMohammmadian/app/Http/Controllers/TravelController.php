@@ -145,8 +145,38 @@ class TravelController extends Controller
         }
 	}
 
-	public function done()
+	public function done(int $travel)
 	{
+        $query = Travel::query()->with('events')->where('id', $travel);
+
+        $travel = $query->first();
+
+        if($travel instanceof Travel) {
+            if($travel->status == TravelStatus::DONE) {
+                return response()->json([
+                    'code' => 'InvalidTravelStatusForThisAction'
+                ], 400);
+            }
+
+            if($travel->allSpotsPassed() && $travel->passengerIsInCar()) {
+                $travel->status = TravelStatus::DONE->value;
+                $travel->save();
+
+                $travel->events()->create([
+                    'type' => TravelEventType::DONE->value
+                ]);
+
+                $travel = $query->first();
+
+                return response()->json([
+                    'travel' => $travel->toArray()
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 
 	public function take()
