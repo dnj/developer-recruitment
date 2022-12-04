@@ -164,19 +164,25 @@ class TravelController extends Controller
                 ], 400);
             }
 
-            if($travel->allSpotsPassed() && $travel->passengerIsInCar()) {
-                $travel->status = TravelStatus::DONE->value;
-                $travel->save();
+            if($travel->allSpotsPassed()) {
+                if($travel->passengerIsInCar()) {
+                    $travel->status = TravelStatus::DONE->value;
+                    $travel->save();
 
-                $travel->events()->create([
-                    'type' => TravelEventType::DONE->value
-                ]);
+                    $travel->events()->create([
+                        'type' => TravelEventType::DONE->value
+                    ]);
 
-                $travel = $query->first();
+                    $travel = $query->first();
 
+                    return response()->json([
+                        'travel' => $travel->toArray()
+                    ]);
+                }
+            } else {
                 return response()->json([
-                    'travel' => $travel->toArray()
-                ]);
+                    'code' => 'AllSpotsDidNotPass'
+                ], 400);
             }
         } else {
             return response()->json([
