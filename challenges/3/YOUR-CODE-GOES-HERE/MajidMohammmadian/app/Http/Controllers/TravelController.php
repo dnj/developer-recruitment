@@ -10,26 +10,28 @@ use App\Exceptions\CannotCancelFinishedTravelException;
 use App\Exceptions\CannotCancelRunningTravelException;
 use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
-use App\Models\Travel;
 use App\Http\Requests\TravelStoreRequest;
-use App\Models\TravelEvent;
-use Illuminate\Http\Request;
+use App\Models\Travel;
+use Illuminate\Http\JsonResponse;
 
 class TravelController extends Controller
 {
-	public function view(Travel $travel)
-	{
+    public function view(Travel $travel): JsonResponse
+    {
         return response()->json([
             'travel' => [
                 'id' => $travel->id
             ]
         ]);
-	}
+    }
 
-	public function store(TravelStoreRequest $request)
-	{
+    /**
+     * @throws ActiveTravelException
+     */
+    public function store(TravelStoreRequest $request): JsonResponse
+    {
         $exist_active_travel = Travel::userHasActiveTravel(auth()->user());
-        if($exist_active_travel) {
+        if ($exist_active_travel) {
             throw new ActiveTravelException();
         }
 
@@ -42,31 +44,35 @@ class TravelController extends Controller
 
         foreach ($request->spots as $item) {
             $travel->spots()->create([
-                'position' => $item['position'],
-                'latitude' => $item['latitude'],
+                'position'  => $item['position'],
+                'latitude'  => $item['latitude'],
                 'longitude' => $item['longitude'],
             ]);
         }
 
         return response()->json([
             'travel' => [
-                'spots' => $request->spots,
+                'spots'        => $request->spots,
                 'passenger_id' => auth()->id(),
-                'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
+                'status'       => TravelStatus::SEARCHING_FOR_DRIVER->value
             ]
         ], 201);
-	}
+    }
 
-	public function cancel(Travel $travel)
-	{
-        if(in_array($travel->status, [
+    /**
+     * @throws CannotCancelFinishedTravelException
+     * @throws CannotCancelRunningTravelException
+     */
+    public function cancel(Travel $travel): JsonResponse
+    {
+        if (in_array($travel->status, [
             TravelStatus::CANCELLED,
             TravelStatus::DONE
         ])) {
             throw new CannotCancelFinishedTravelException();
         } else {
-            if($travel->status == TravelStatus::RUNNING) {
-                if($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id())) {
+            if ($travel->status == TravelStatus::RUNNING) {
+                if ($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id())) {
                     throw new CannotCancelRunningTravelException();
                 }
             }
@@ -78,98 +84,94 @@ class TravelController extends Controller
                 'travel' => $travel
             ]);
         }
-	}
+    }
 
-	public function passengerOnBoard(int $travel_id)
-	{
-        $query = Travel::query()->with('events')->where('id', $travel_id);
+    /**
+     * @throws InvalidTravelStatusForThisActionException
+     * @throws CarDoesNotArrivedAtOriginException
+     */
+    public function passengerOnBoard(Travel $travel): JsonResponse
+    {
+        $travel = $travel->with('events')->first();
 
-        $travel = $query->first();
-
-        if($travel instanceof Travel) {
-            if($travel->passenger_id == auth()->id()) {
-                abort(403);
-            }
-
-            if(!$travel->driverHasArrivedToOrigin()) {
-                throw new CarDoesNotArrivedAtOriginException();
-            }
-
-            $found = false;
-            foreach ($travel->events as $e) {
-                if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
-                    $found = true;
-                    break;
-                }
-            }
-
-            if($found || ($travel->status == TravelStatus::DONE)) {
-                throw new InvalidTravelStatusForThisActionException();
-            }
-
-            $travel->events()->create([
-                'type' => TravelEventType::PASSENGER_ONBOARD->value
-            ]);
-
-            $travel = $query->first();
-
-            return response()->json([
-                'travel' => $travel->toArray()
-            ]);
-        } else {
-            return response()->json([
-                'code' => 'TravelNotFound'
-            ], 400);
+        if ($travel->passenger_id == auth()->id()) {
+            abort(403);
         }
-	}
 
-	public function done(int $travel_id)
-	{
-        $query = Travel::query()->with('events')->where('id', $travel_id);
+        if (!$travel->driverHasArrivedToOrigin()) {
+            throw new CarDoesNotArrivedAtOriginException();
+        }
 
-        $travel = $query->first();
-
-        if($travel instanceof Travel) {
-            if($travel->passenger_id == auth()->id()) {
-                abort(403);
+        $found = false;
+        foreach ($travel->events as $e) {
+            if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
+                $found = true;
+                break;
             }
+        }
 
-            if($travel->status == TravelStatus::DONE) {
-                throw new InvalidTravelStatusForThisActionException();
-            }
+        if ($found || ($travel->status == TravelStatus::DONE)) {
+            throw new InvalidTravelStatusForThisActionException();
+        }
 
-            if($travel->allSpotsPassed()) {
-                if($travel->passengerIsInCar()) {
-                    $travel->status = TravelStatus::DONE->value;
-                    $travel->save();
+        $travel->events()->create([
+            'type' => TravelEventType::PASSENGER_ONBOARD->value
+        ]);
 
-                    $travel->events()->create([
-                        'type' => TravelEventType::DONE->value
-                    ]);
+        return response()->json([
+            'travel' => $travel->with('events')->first()->toArray()
+        ]);
+    }
 
-                    $travel = $query->first();
+    /**
+     * @throws InvalidTravelStatusForThisActionException
+     * @throws AllSpotsDidNotPassException
+     */
+    public function done(Travel $travel): JsonResponse
+    {
+        $travel = $travel->with('events')->first();
 
-                    return response()->json([
-                        'travel' => $travel->toArray()
-                    ]);
-                }
+        if ($travel->passenger_id == auth()->id()) {
+            abort(403);
+        }
+
+        if ($travel->status == TravelStatus::DONE) {
+            throw new InvalidTravelStatusForThisActionException();
+        }
+
+        if ($travel->allSpotsPassed()) {
+            if ($travel->passengerIsInCar()) {
+                $travel->status = TravelStatus::DONE->value;
+                $travel->save();
+
+                $travel->events()->create([
+                    'type' => TravelEventType::DONE->value
+                ]);
+
+                $travel = $travel->with('events')->first();
+
+                return response()->json([
+                    'travel' => $travel->toArray()
+                ]);
             } else {
                 throw new AllSpotsDidNotPassException();
             }
         } else {
-            return response()->json([
-                'code' => 'TravelNotFound'
-            ], 400);
+            throw new AllSpotsDidNotPassException();
         }
-	}
+    }
 
-	public function take(Travel $travel)
-	{
-        if(Travel::userHasActiveTravel(auth()->user())) {
+    /**
+     * @throws InvalidTravelStatusForThisActionException
+     * @throws ActiveTravelException
+     */
+    public function take(Travel $travel): JsonResponse
+    {
+        if (Travel::userHasActiveTravel(auth()->user())) {
             throw new ActiveTravelException();
         }
 
-        if($travel->status == TravelStatus::CANCELLED) {
+        if ($travel->status == TravelStatus::CANCELLED) {
             throw new InvalidTravelStatusForThisActionException();
         }
 
@@ -181,11 +183,11 @@ class TravelController extends Controller
         ]);
 
         return response()->json([
-            'travel' => collect($travel->toArray())->filter(function (){
+            'travel' => collect($travel->toArray())->filter(function () {
                 return [
                     'id', 'driver_id', 'status'
                 ];
             })
         ]);
-	}
+    }
 }
