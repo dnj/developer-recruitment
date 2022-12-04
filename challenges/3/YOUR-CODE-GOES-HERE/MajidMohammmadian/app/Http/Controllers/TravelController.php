@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 
 class TravelController extends Controller
 {
-	public function view(int $travel)
+	public function view(int $travel_id)
 	{
-        $travel = Travel::query()->where('id', $travel)->first();
+        $travel = Travel::query()->where('id', $travel_id)->first();
 
         if($travel instanceof Travel) {
             return response()->json([
@@ -61,9 +61,9 @@ class TravelController extends Controller
         ], 201);
 	}
 
-	public function cancel(int $travel)
+	public function cancel(int $travel_id)
 	{
-        $travel = Travel::query()->where('id', $travel)->first();
+        $travel = Travel::query()->where('id', $travel_id)->first();
 
         if($travel instanceof Travel) {
             if(in_array($travel->status, [
@@ -96,17 +96,15 @@ class TravelController extends Controller
         }
 	}
 
-	public function passengerOnBoard(int $travel)
+	public function passengerOnBoard(int $travel_id)
 	{
-        $query = Travel::query()->with('events')->where('id', $travel);
+        $query = Travel::query()->with('events')->where('id', $travel_id);
 
         $travel = $query->first();
 
         if($travel instanceof Travel) {
             if($travel->passenger_id == auth()->id()) {
-                return response()->json([
-                    'code' => 'Forbidden'
-                ], 403);
+                abort(403);
             }
 
             if(!$travel->driverHasArrivedToOrigin()) {
@@ -145,9 +143,9 @@ class TravelController extends Controller
         }
 	}
 
-	public function done(int $travel)
+	public function done(int $travel_id)
 	{
-        $query = Travel::query()->with('events')->where('id', $travel);
+        $query = Travel::query()->with('events')->where('id', $travel_id);
 
         $travel = $query->first();
 
@@ -191,7 +189,7 @@ class TravelController extends Controller
         }
 	}
 
-	public function take(int $travel)
+	public function take(int $travel_id)
 	{
         if(Travel::userHasActiveTravel(auth()->user())) {
             return response()->json([
@@ -199,7 +197,7 @@ class TravelController extends Controller
             ], 400);
         }
 
-        $query = Travel::query()->with('events')->where('id', $travel);
+        $query = Travel::query()->with('events')->where('id', $travel_id);
 
         $travel = $query->first();
 
