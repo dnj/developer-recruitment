@@ -11,8 +11,21 @@ use Illuminate\Http\Request;
 class TravelController extends Controller
 {
 
-	public function view()
+	public function view(int $travel)
 	{
+        $travel = Travel::query()->where('id', $travel)->first();
+
+        if($travel instanceof Travel) {
+            return response()->json([
+                'travel' => [
+                    'id' => $travel->id
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 
 	public function store(TravelStoreRequest $request)
