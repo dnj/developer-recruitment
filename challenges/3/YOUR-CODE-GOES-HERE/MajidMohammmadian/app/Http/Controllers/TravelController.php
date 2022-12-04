@@ -193,6 +193,12 @@ class TravelController extends Controller
 
 	public function take(int $travel)
 	{
+        if(Travel::userHasActiveTravel(auth()->user())) {
+            return response()->json([
+                'code' => 'ActiveTravel'
+            ], 400);
+        }
+
         $query = Travel::query()->with('events')->where('id', $travel);
 
         $travel = $query->first();
