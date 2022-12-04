@@ -152,6 +152,12 @@ class TravelController extends Controller
         $travel = $query->first();
 
         if($travel instanceof Travel) {
+            if($travel->passenger_id == auth()->id()) {
+                return response()->json([
+                    'code' => 'Forbidden'
+                ], 403);
+            }
+
             if($travel->status == TravelStatus::DONE) {
                 return response()->json([
                     'code' => 'InvalidTravelStatusForThisAction'
