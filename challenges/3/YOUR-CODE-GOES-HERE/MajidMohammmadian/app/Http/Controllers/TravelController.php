@@ -11,21 +11,13 @@ use Illuminate\Http\Request;
 
 class TravelController extends Controller
 {
-	public function view(int $travel_id)
+	public function view(Travel $travel)
 	{
-        $travel = Travel::query()->where('id', $travel_id)->first();
-
-        if($travel instanceof Travel) {
-            return response()->json([
-                'travel' => [
-                    'id' => $travel->id
-                ]
-            ]);
-        } else {
-            return response()->json([
-                'code' => 'TravelNotFound'
-            ], 400);
-        }
+        return response()->json([
+            'travel' => [
+                'id' => $travel->id
+            ]
+        ]);
 	}
 
 	public function store(TravelStoreRequest $request)
@@ -61,38 +53,30 @@ class TravelController extends Controller
         ], 201);
 	}
 
-	public function cancel(int $travel_id)
+	public function cancel(Travel $travel)
 	{
-        $travel = Travel::query()->where('id', $travel_id)->first();
-
-        if($travel instanceof Travel) {
-            if(in_array($travel->status, [
-                TravelStatus::CANCELLED,
-                TravelStatus::DONE
-            ])) {
-                return response()->json([
-                    'code' => 'CannotCancelFinishedTravel'
-                ], 400);
-            } else {
-                if($travel->status == TravelStatus::RUNNING) {
-                    if($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id())) {
-                        return response()->json([
-                            'code' => 'CannotCancelRunningTravel'
-                        ], 400);
-                    }
-                }
-
-                $travel->status = TravelStatus::CANCELLED->value;
-                $travel->save();
-
-                return response()->json([
-                    'travel' => $travel
-                ]);
-            }
-        } else {
+        if(in_array($travel->status, [
+            TravelStatus::CANCELLED,
+            TravelStatus::DONE
+        ])) {
             return response()->json([
-                'code' => 'TravelNotFound'
+                'code' => 'CannotCancelFinishedTravel'
             ], 400);
+        } else {
+            if($travel->status == TravelStatus::RUNNING) {
+                if($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id())) {
+                    return response()->json([
+                        'code' => 'CannotCancelRunningTravel'
+                    ], 400);
+                }
+            }
+
+            $travel->status = TravelStatus::CANCELLED->value;
+            $travel->save();
+
+            return response()->json([
+                'travel' => $travel
+            ]);
         }
 	}
 
@@ -189,7 +173,7 @@ class TravelController extends Controller
         }
 	}
 
-	public function take(int $travel_id)
+	public function take(Travel $travel)
 	{
         if(Travel::userHasActiveTravel(auth()->user())) {
             return response()->json([
@@ -197,35 +181,25 @@ class TravelController extends Controller
             ], 400);
         }
 
-        $query = Travel::query()->with('events')->where('id', $travel_id);
-
-        $travel = $query->first();
-
-        if($travel instanceof Travel) {
-            if($travel->status == TravelStatus::CANCELLED) {
-                return response()->json([
-                    'code' => 'InvalidTravelStatusForThisAction'
-                ], 400);
-            }
-
-            $travel->driver_id = auth()->id();
-            $travel->save();
-
-            $travel->events()->create([
-                'type' => TravelEventType::ACCEPT_BY_DRIVER->value
-            ]);
-
+        if($travel->status == TravelStatus::CANCELLED) {
             return response()->json([
-                'travel' => collect($travel->toArray())->filter(function (){
-                    return [
-                        'id', 'driver_id', 'status'
-                    ];
-                })
-            ]);
-        } else {
-            return response()->json([
-                'code' => 'TravelNotFound'
+                'code' => 'InvalidTravelStatusForThisAction'
             ], 400);
         }
+
+        $travel->driver_id = auth()->id();
+        $travel->save();
+
+        $travel->events()->create([
+            'type' => TravelEventType::ACCEPT_BY_DRIVER->value
+        ]);
+
+        return response()->json([
+            'travel' => collect($travel->toArray())->filter(function (){
+                return [
+                    'id', 'driver_id', 'status'
+                ];
+            })
+        ]);
 	}
 }

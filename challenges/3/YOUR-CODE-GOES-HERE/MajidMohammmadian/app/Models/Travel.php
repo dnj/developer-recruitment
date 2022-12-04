@@ -50,7 +50,7 @@ class Travel extends Model
 
     public function spots()
     {
-        return $this->hasMany(TravelSpot::class);
+        return $this->hasMany(TravelSpot::class)->orderBy('position');
     }
 
     public function passengerIsInCar(): bool {

@@ -65,8 +65,12 @@ class TravelSpotController extends Controller
                 abort(403);
             }
 
-            $travel->spots()->where('position', 1)->update($request->toArray());
-            // $travel->spots()->create($request->toArray());
+            foreach ($travel->spots as $item) {
+                if($item->position >= $request->position) {
+                    $travel->spots()->where('position', $request->position)->increment('position');
+                }
+            }
+            $travel->spots()->create($request->toArray());
 
             $travel = $query->first();
 

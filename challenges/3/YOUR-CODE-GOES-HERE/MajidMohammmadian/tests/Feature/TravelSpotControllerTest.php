@@ -100,7 +100,7 @@ class TravelSpotControllerTest extends TestCase
             }
         }
 
-        $this->assertPositionsInRange(2, $response['travel']['spots']);
+        $this->assertPositionsInRange(3, $response['travel']['spots']);
     }
 
     public function testStoreAsDriver(): void
