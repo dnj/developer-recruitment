@@ -198,6 +198,12 @@ class TravelController extends Controller
         $travel = $query->first();
 
         if($travel instanceof Travel) {
+            if($travel->status == TravelStatus::CANCELLED) {
+                return response()->json([
+                    'code' => 'InvalidTravelStatusForThisAction'
+                ], 400);
+            }
+
             $travel->driver_id = auth()->id();
             $travel->save();
 
