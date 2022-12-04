@@ -20,7 +20,7 @@ class TravelSpotStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'position' => ['required', 'integer', 'min:1'],
+            'position' => ['required', 'integer', 'min:1', 'max:2'],
             'latitude' => ['required','min:-90', 'max:90'],
             'longitude' => ['required','min:-180', 'max:180'],
         ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TravelStatus;
 use App\Models\Travel;
 use Carbon\Carbon;
+use App\Http\Requests\TravelSpotStoreRequest;
 
 class TravelSpotController extends Controller
 {
@@ -53,8 +54,30 @@ class TravelSpotController extends Controller
         }
 	}
 
-	public function store()
+	public function store(int $travel_id, TravelSpotStoreRequest $request)
 	{
+        $query = Travel::query()->with('spots')->where('id', $travel_id);
+
+        $travel = $query->first();
+
+        if($travel instanceof Travel) {
+            if($travel->driver_id == auth()->id()) {
+                abort(403);
+            }
+
+            $travel->spots()->where('position', 1)->update($request->toArray());
+            // $travel->spots()->create($request->toArray());
+
+            $travel = $query->first();
+
+            return response()->json([
+                'travel' => $travel->toArray()
+            ]);
+        } else {
+            return response()->json([
+                'code' => 'TravelNotFound'
+            ], 400);
+        }
 	}
 
 	public function destroy()
