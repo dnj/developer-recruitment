@@ -27,8 +27,14 @@ class TravelSpotController extends Controller
 
             $travel_arrived_exist = $travel->spots()->where('position', 0)->whereNotNull('arrived_at')->exists();
 
-            if($travel_arrived_exist) {
+            if($travel->passenger_id == auth()->id() && $travel_arrived_exist) {
                 abort(403);
+            }
+
+            if($travel_arrived_exist) {
+                return response()->json([
+                    'code' => 'SpotAlreadyPassed'
+                ], 400);
             }
 
             $travel->spots()->where('position', 0)->update([
