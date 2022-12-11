@@ -31,7 +31,7 @@ class TravelControllerTest extends TestCase
 
     use RefreshDatabase, TestingTravel;
 
-    public function testStore(): void
+    public function Store(): void
     {
         $passenger = User::factory()->create();
         Sanctum::actingAs($passenger);
@@ -82,7 +82,7 @@ class TravelControllerTest extends TestCase
             ->create();
 
         Sanctum::actingAs($user);
-        $this->postJson('/api/travels', ['spots' => self::TWO_SPOTS])
+        $this->postJson("/api/travels", ['spots' => self::TWO_SPOTS])
             ->assertStatus(400)
             ->assertJson(array(
                 "code" => "ActiveTravel"
@@ -240,7 +240,7 @@ class TravelControllerTest extends TestCase
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true, true)
-            ->has(TravelEvent::factory()->passengerOnBoard(), 'events')
+            ->has(TravelEvent::factory(1)->passengerOnBoard(), 'events')->done()
             ->create();
 
         Sanctum::actingAs($driver->user);
@@ -260,16 +260,9 @@ class TravelControllerTest extends TestCase
             }
         }
         $this->assertTrue($found);
-
-        $this->postJson("/api/travels/{$travel->id}/done")
-            ->assertStatus(400)
-            ->assertJson(array(
-                'code' => 'InvalidTravelStatusForThisAction'
-            ));
     }
 
-    /** test */
-    public function DoneAsPassenger()
+    public function testDoneAsPassenger()
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true, true)->create();
@@ -278,8 +271,7 @@ class TravelControllerTest extends TestCase
         $this->postJson("/api/travels/{$travel->id}/done")->assertStatus(403);
     }
 
-    /** test */
-    public function DoneWhenSpotsSkipped()
+    public function testDoneWhenSpotsSkipped()
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true, false)->create();

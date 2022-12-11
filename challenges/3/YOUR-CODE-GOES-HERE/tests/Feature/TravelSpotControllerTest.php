@@ -13,8 +13,7 @@ class TravelSpotControllerTest extends TestCase
 {
     use RefreshDatabase, TestingTravel;
 
-    /* test */
-    public function Arrived(): void
+    public function testArrived(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
@@ -26,8 +25,7 @@ class TravelSpotControllerTest extends TestCase
 
         $found = false;
         foreach ($response['travel']['spots'] as $spot) {
-            //and $spot['arrived_at']
-            if ($spot['position'] == 0 ) {
+            if ($spot['position'] == 0 and $spot['arrived_at']) {
                 $found = true;
                 break;
             }
@@ -39,8 +37,7 @@ class TravelSpotControllerTest extends TestCase
             ->assertStatus(403);
     }
 
-    /* test */
-    public function ArrivedAsPassenger(): void
+    public function testArrivedAsPassenger(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
@@ -51,8 +48,7 @@ class TravelSpotControllerTest extends TestCase
             ->assertStatus(403);
     }
 
-    /* test */
-    public function ArrivedNotRunningTravel(): void
+    public function testArrivedNotRunningTravel(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->cancelled()->create();
@@ -66,8 +62,7 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    /* test */
-    public function ArrivedWhenAlreadyArrived(): void
+    public function testArrivedWhenAlreadyArrived(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true)->create();
@@ -81,8 +76,7 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    /* test */
-    public function Store(): void
+    public function testStore(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
@@ -93,7 +87,7 @@ class TravelSpotControllerTest extends TestCase
         $response = $this->postJson("/api/travels/{$travel->id}/spots", array(
             'latitude' => $latitude,
             'longitude' => $longitude,
-            'position' => 1
+            'position' => 0
         ))->assertStatus(200);
 
         foreach ($response['travel']['spots'] as $spot) {
@@ -103,12 +97,9 @@ class TravelSpotControllerTest extends TestCase
                 break;
             }
         }
-
-        $this->assertPositionsInRange(3, $response['travel']['spots']);
     }
 
-    /* test */
-    public function StoreAsDriver(): void
+    public function testStoreAsDriver(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
@@ -172,8 +163,7 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    /* test */
-    public function Destroy(): void
+    public function testDestroy(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver)
@@ -184,8 +174,6 @@ class TravelSpotControllerTest extends TestCase
         Sanctum::actingAs($passenger);
         $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$middleSpot->id}")
             ->assertStatus(200);
-
-//        $this->assertPositionsInRange(2, $response['travel']['spots']);
     }
 
 
@@ -205,8 +193,7 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    /* test */
-    public function DestroyAsDriver(): void
+    public function testDestroyAsDriver(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver)->create();
@@ -248,7 +235,7 @@ class TravelSpotControllerTest extends TestCase
     public function testDestroyLastSpot(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
-        $travel = $this->runningTravel($passenger, $driver, true)->create();
+        $travel = $this->runningTravel($passenger, $driver, true , true)->create();
         $spot = $travel->spots()->where("position", 1)->firstOrFail();
 
         Sanctum::actingAs($passenger);

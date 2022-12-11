@@ -20,7 +20,7 @@ class TravelSpotStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'position' => ['nullable', 'integer', 'min:1'],
+            'position' => ['nullable', 'integer'],
             'latitude' => ['nullable','min:-90', 'max:90'],
             'longitude' => ['nullable','min:-180', 'max:180'],
         ];

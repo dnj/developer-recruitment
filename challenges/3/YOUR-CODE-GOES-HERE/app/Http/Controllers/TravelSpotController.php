@@ -2,115 +2,115 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TravelStatus;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use App\Http\Requests\TravelSpotStoreRequest;
+use Illuminate\Http\Response;
+use App\Enums\TravelStatus;
+use App\Models\TravelSpot;
+use App\Models\Travel;
 use App\Models\Driver;
 use App\Models\User;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
-use App\Models\Travel;
-use App\Models\TravelSpot;
 
 class TravelSpotController extends Controller
 {
-	public function arrived(Travel $travel)
+	public function arrived(Travel $travel , TravelSpot $spot)
 	{
-        $travels            = Travel::factory()->create(['status' => TravelStatus::RUNNING->value]);
-        $travel_spot        = TravelSpot::factory(2)->create();
-        $arrived            = TravelSpot::query()->where([
-                'travel_id' => $travel->id
-        ])->first();
-
-        if(is_null($arrived->arrived_at)){
-            $arrived->update(['position' => 1 , 'arrived_at' => now()]);
-
-            if(!is_null($arrived->arrived_at)){
+        if(Driver::isDriver(auth()->user())){
+            if($travel->status->value == TravelStatus::RUNNING->value && is_null($spot->arrived_at)){
+                $spot->update(['arrived_at' => now()]);
                 return response()->json([
-                    'code' =>'SpotAlreadyPassed'
+                    'travel' => [
+                        'spots' => [$spot]
+                    ]
+                ],HttpFoundationResponse::HTTP_OK);
+            }elseif($travel->status->value == TravelStatus::CANCELLED->value ||
+                    $travel->status->value == TravelStatus::RUNNING->value && !is_null($spot->arrived_at)
+            ){
+                return response()->json([
+                    'code' => 'InvalidTravelStatusForThisAction' || 'SpotAlreadyPassed'
                 ],HttpFoundationResponse::HTTP_BAD_REQUEST);
             }
-//            dd($arrived);
 
-
+        }else{
+            return (new Response())->setStatusCode(
+                HttpFoundationResponse::HTTP_FORBIDDEN
+            );
         }
-
-//        if($travel->status->value == (TravelStatus::CANCELLED->value || TravelStatus::DONE->value )){
-//            return response()->json([
-//                'code' => 'InvalidTravelStatusForThisAction' || 'SpotAlreadyPassed'
-//            ],HttpFoundationResponse::HTTP_BAD_REQUEST);
-//        }
-
-//        if(isset($arrived)){
-//            return response()->json([
-//                "travel" => [
-//                    "spots" => $create_travel_spot
-//                ]
-//            ],HttpFoundationResponse::HTTP_OK);
-//        }
-
 	}
 
 	public function store(TravelSpotStoreRequest $request , Travel $travel)
 	{
-        $create_travel_spot =  TravelSpot::query()->create([
-            'travel_id' => $travel->id,
-            'position'  => $request->position,
-            'latitude'  => $request->latitude ,
-            'longitude' => $request->longitude
-        ]);
-
-        if(!in_array($travel->passenger_id , Driver::query()->get('id')->toArray())){
-            if(isset($create_travel_spot)){
-                if(!in_array($create_travel_spot->position , [0,1])){
-                    return response()->json([
-                        'errors' => ['position' => '']
-                    ] , HttpFoundationResponse::HTTP_UNPROCESSABLE_ENTITY);
-                }else{
-                    if((new Travel())->allSpotsPassed() || (new Travel())->driverHasArrivedToOrigin()) {
-                        return response()->json([
-                            'code' => 'SpotAlreadyPassed' || 'InvalidTravelStatusForThisAction'
-                        ], HttpFoundationResponse::HTTP_BAD_REQUEST);
-                    }else{
-                        return response()->json([
-                            'travel' => [
-                                'spots' => $create_travel_spot->get()
-                            ]
-                        ] , HttpFoundationResponse::HTTP_OK);
-                    }
-                }
-            }
-        }else{
-            return response()->setStatusCode(
+        if(Driver::isDriver(auth()->user())){
+            return (new Response())->setStatusCode(
                 HttpFoundationResponse::HTTP_FORBIDDEN
             );
+        }else{
+            $create_travel_spot =  TravelSpot::query()->create([
+                'travel_id'  => $travel->id,
+                'position'   => $request->position,
+                'latitude'   => $request->latitude ,
+                'longitude'  => $request->longitude,
+                'arrived_at' => null
+            ]);
+
+            if(in_array($create_travel_spot->position , [0,1])){
+                if($create_travel_spot->position == 0){
+                    $travel_spot = TravelSpot::query()->where('travel_id' , $travel->id)->first();
+                    $travel_spot->update(['position' => 1]);
+
+                    return response()->json([
+                        'travel' => [
+                            'spots' => [$create_travel_spot]
+                        ]
+                    ],HttpFoundationResponse::HTTP_OK);
+                }else{
+                    if($travel->status->value == TravelStatus::CANCELLED->value){
+                        return response()->json([
+                            'code' => 'InvalidTravelStatusForThisAction'
+                        ],HttpFoundationResponse::HTTP_BAD_REQUEST);
+                    }
+
+                    return response()->json([
+                        'code' => 'SpotAlreadyPassed'
+                    ],HttpFoundationResponse::HTTP_BAD_REQUEST);
+                }
+
+            }else{
+                return response()->json([
+                    'errors' => ['position' => '']
+                ] , HttpFoundationResponse::HTTP_UNPROCESSABLE_ENTITY);
+            }
         }
 	}
 
 	public function destroy(Travel $travel , TravelSpot $spot)
 	{
-        $travel_spot = TravelSpot::query()->where([
-           'travel_id'  => $travel->id,
-           'id'         => $spot->id
-        ])->firstOrFail();
-
-        if(!Driver::isDriver(User::query()->where('id' , $travel->passenger_id)->first())){
-            if($travel_spot->delete() || is_null($travel_spot->arrived_at) ||
-                $travel->status->value == TravelStatus::CANCELLED->value
-            ){
-                return response()->json([
-                    'code' => 'ProtectedSpot' || 'SpotAlreadyPassed' || 'InvalidTravelStatusForThisAction'
-                ] , HttpFoundationResponse::HTTP_BAD_REQUEST);
-            }
-
-            return response()->json([
-                'travel' => [
-                    'spots' => $travel_spot->get()
-                ]
-            ] , HttpFoundationResponse::HTTP_OK);
-        }else{
+        if(Driver::isDriver(auth()->user())){
             return (new Response())->setStatusCode(
                 HttpFoundationResponse::HTTP_FORBIDDEN
             );
+        }else{
+            if(is_null($spot->arrived_at)){
+                if($travel->status->value == TravelStatus::RUNNING->value && $spot->position == 1){
+                    return response()->json([
+                        'travel' => [
+                            'spots' => [$spot]
+                        ]
+                    ],HttpFoundationResponse::HTTP_OK);
+                }elseif($travel->status->value == TravelStatus::RUNNING->value && $spot->position == 0 ||
+                    $travel->status->value == TravelStatus::CANCELLED->value
+                ){
+                    return response()->json([
+                        'code' => 'ProtectedSpot' || 'InvalidTravelStatusForThisAction'
+                    ],HttpFoundationResponse::HTTP_BAD_REQUEST);
+                }
+            }else{
+                if($travel->status->value == TravelStatus::RUNNING->value){
+                    return response()->json([
+                        'code' => 'SpotAlreadyPassed' || 'ProtectedSpot'
+                    ],HttpFoundationResponse::HTTP_BAD_REQUEST);
+                }
+            }
         }
 	}
 }

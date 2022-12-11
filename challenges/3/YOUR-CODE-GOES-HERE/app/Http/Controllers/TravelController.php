@@ -16,7 +16,6 @@ use App\Models\User;
 
 class TravelController extends Controller
 {
-
 	public function view(Travel $travel) : object
 	{
         return response()->json([
@@ -28,7 +27,7 @@ class TravelController extends Controller
 	{
         $spots = [];
         $create_travel = Travel::query()->create([
-            "passenger_id"   => User::factory()->create()->id,
+            "passenger_id"   => auth()->user()->id,
             "status"         => TravelStatus::SEARCHING_FOR_DRIVER->value
         ]);
 
@@ -36,7 +35,6 @@ class TravelController extends Controller
             foreach ($request->all() as $form_data) {
                 foreach ($form_data as $data) {
                     if (in_array($data['position'], [0, 1])) {
-
                         TravelSpot::query()->create([
                             "travel_id" => $create_travel->id,
                             "position" => $data['position'],
@@ -55,14 +53,6 @@ class TravelController extends Controller
                 }
             }
         }
-
-//        $create_travel->update(['status' => TravelStatus::RUNNING->value]);
-//        if($create_travel->status->value == TravelStatus::RUNNING->value){
-//            return response()->json([
-//                "code" => "ActiveTravel"
-//            ], HttpFoundationResponse::HTTP_BAD_REQUEST);
-//        }
-
         return response()->json([
             "travel" => [
                 "spots"        => $spots,
@@ -124,59 +114,42 @@ class TravelController extends Controller
 
 	public function done(Travel $travel)
 	{
-        $check_travel  = Travel::query()->where(
-            'id' , $travel->id
-        )->first();
-
-        $travel_events = TravelEvent::query()->where(
-            'travel_id',$check_travel->id
-        )->get() ;
-
-        $travel_spot   = TravelSpot::query()->where([
-            'travel_id'    => $travel->id
-        ])->first();
-
-        $done_status   = TravelStatus::DONE->value ;
-
-        if($check_travel->status->value == TravelStatus::RUNNING->value){
-            $check_travel->update(['status' => $done_status]);
-
-            foreach ($travel_events as $even){
-                $even->update(['type' => $done_status]);
+        if(Driver::isDriver(auth()->user())){
+            if($travel->status->value == TravelStatus::DONE->value){
+                $travel->events()->update(['type' => TravelEventType::DONE->value]);
+                return response()->json([
+                    "travel" => [
+                        'status' =>  TravelEventType::DONE->value,
+                        'events' => $travel->events()->get()
+                    ]
+                ],HttpFoundationResponse::HTTP_OK);
+            }else{
+                return response()->json([
+                    'code' => 'AllSpotsDidNotPass'
+                ], HttpFoundationResponse::HTTP_BAD_REQUEST);
             }
-
-            return response()->json([
-                "travel" => [
-                    'status' => $done_status,
-                    'events' => $travel_events
-                ]
-            ],HttpFoundationResponse::HTTP_OK);
-
-        }elseif ($check_travel->status->value == TravelStatus::DONE->value){
-
-            return response()->json([
-                "code" => 'AllSpotsDidNotPass' || 'InvalidTravelStatusForThisAction'
-            ],HttpFoundationResponse::HTTP_BAD_REQUEST);
-
+        }else{
+            return (new Response())->setStatusCode(
+                HttpFoundationResponse::HTTP_FORBIDDEN
+            );
         }
 	}
 
 	public function take(Travel $travel)
 	{
-        $check_travel     = Travel::query()->where('id' , $travel->id)->first();
         $searching_status = TravelStatus::SEARCHING_FOR_DRIVER->value ;
 
-        if($check_travel->status->value == $searching_status){
+        if($travel->status->value == $searching_status){
             return response()->json([
                 "travel" => [
-                    'id'         => $check_travel->id,
-                    'driver_id'  => $check_travel->driver_id,
+                    'id'         => $travel->id,
+                    'driver_id'  => $travel->driver_id,
                     'status'     => $searching_status,
                 ]
             ],HttpFoundationResponse::HTTP_OK);
 
-        }elseif ($check_travel->status->value == TravelStatus::CANCELLED->value ||
-            (TravelStatus::RUNNING->value && !is_null($check_travel->driver_id))
+        }elseif ($travel->status->value == TravelStatus::CANCELLED->value ||
+            (TravelStatus::RUNNING->value && !is_null($travel->driver_id))
         ){
 
             return response()->json([
