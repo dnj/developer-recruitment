@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="fan fan-rotation-y">
+    <div class="fan fan-oscillation">
       <img
       src="@/assets/blades.svg"
       alt="blades"
@@ -8,10 +8,10 @@
       :class="getRotation"
       />
     </div>
-    <div class="fan-center fan-rotation-y"></div>
+    <div class="fan-center fan-oscillation"></div>
     <div class="fan-stand"></div>
-    <div class="fan-border__inner-1 fan-rotation-y"></div>
-    <div class="fan-border__inner-2 fan-rotation-y"></div>
+    <div class="fan-border__inner-1 fan-oscillation"></div>
+    <div class="fan-border__inner-2 fan-oscillation"></div>
   </div>
 </template>
 
@@ -101,8 +101,8 @@ export default defineComponent({
     bottom: 0;
   }
 
-  &-rotation-y {
-    animation: rotation-y 5s infinite linear;
+  &-oscillation {
+    animation: oscillation 5s infinite linear;
   }
 
   &-rotation {
@@ -137,7 +137,7 @@ export default defineComponent({
   }
 }
 
-@keyframes rotation-y {
+@keyframes oscillation {
   0% {
     transform: rotateY(0deg);
   }
