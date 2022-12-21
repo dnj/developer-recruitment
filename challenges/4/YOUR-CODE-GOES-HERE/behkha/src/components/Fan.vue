@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="fan">
+    <div class="fan fan-rotation-y">
       <img
       src="@/assets/blades.svg"
       alt="blades"
@@ -8,8 +8,10 @@
       :class="getRotation"
       />
     </div>
-    <div class="fan-center"></div>
+    <div class="fan-center fan-rotation-y"></div>
     <div class="fan-stand"></div>
+    <div class="fan-border__inner-1 fan-rotation-y"></div>
+    <div class="fan-border__inner-2 fan-rotation-y"></div>
   </div>
 </template>
 
@@ -51,14 +53,34 @@ export default defineComponent({
 
 .fan {
 
-  display: flex;
-  flex-direction: column;
-  z-index: 3 !important;
   margin-bottom: 12px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 1%, rgba(255,255,255,0) 100%);
+  border-radius: 50%;
+  // box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.5);
 
   &-border {
     border: 1.5px solid white;
     border-radius: 50%;
+
+    &__inner-1 {
+      width: 90px;
+      height: 90px;
+      background-color: transparent;
+      border: 1.5px solid white;
+      border-radius: 50%;
+      position: absolute;
+      margin-bottom: 12px;
+    }
+
+    &__inner-2 {
+      width: 130px;
+      height: 130px;
+      background-color: transparent;
+      border: 1.5px solid white;
+      border-radius: 50%;
+      position: absolute;
+      margin-bottom: 12px;
+    }
   }
 
   &-center {
@@ -67,20 +89,25 @@ export default defineComponent({
     border-radius: 50%;
     background-color: white;
     position: absolute;
+    margin-bottom: 12px;
+    box-shadow: 0px 0px 100px 0px rgba(0,0,0,0.5);
   }
 
   &-stand {
     width: 12px;
     height: 25%;
-    background-color: white;
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(204,204,204,1) 100%);
     position: absolute;
     bottom: 0;
-    z-index: 2 !important;
+  }
+
+  &-rotation-y {
+    animation: rotation-y 5s infinite linear;
   }
 
   &-rotation {
     animation-name: rotation;
-    animation-duration: 1s;
+    animation-duration: 2s;
     animation-iteration-count: infinite;
 
     &__simple {
@@ -108,5 +135,28 @@ export default defineComponent({
   to {
     transform: rotate(359deg);
   }
+}
+
+@keyframes rotation-y {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  25% {
+    transform: rotateY(45deg);
+  }
+
+  50% {
+    transform: rotateY(0deg);
+  }
+
+  75% {
+    transform: rotateY(-45deg);
+  }
+
+  100% {
+    transform: rotateY(0deg);
+  }
+
 }
 </style>
