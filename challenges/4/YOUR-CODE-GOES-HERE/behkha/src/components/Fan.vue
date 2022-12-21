@@ -1,10 +1,14 @@
 <template>
-  <div id="container">
-    <img
+  <div id="container" class="d-flex flex-column justify-content-center align-items-center">
+    <div class="fan">
+      <img
       src="@/assets/blades.svg"
       alt="blades"
+      class="fan-border"
       :class="getRotation"
-    />
+      />
+    </div>
+    <div class="fan-stand"></div>
   </div>
 </template>
 
@@ -37,18 +41,37 @@ export default defineComponent({
 
 <style scoped lang="scss">
 #container {
+  position: relative;
   width: 100%;
-  height: 33vh;
+  height: max-content;
+  padding: 60px 0;
+  background-color: var(--primary-color);
+}
+
+.fan {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-color);
+  z-index: 3 !important;
+  margin-bottom: 12px;
+}
+
+.fan-border {
+  border: 1.5px solid white;
+  border-radius: 50%;
+}
+
+.fan-stand {
+  width: 12px;
+  height: 25%;
+  background-color: white;
+  position: absolute;
+  bottom: 0;
+  z-index: 2 !important;
 }
 
 .fan-rotation {
   animation-name: rotation;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-iteration-count: infinite;
 
   &__simple {
