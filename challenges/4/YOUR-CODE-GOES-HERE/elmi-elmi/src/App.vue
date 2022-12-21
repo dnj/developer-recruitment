@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main >
       <SectionFanTable/>
 <!--      <HelloWorld />-->
     </v-main>

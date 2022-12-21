@@ -1,5 +1,5 @@
 <template>
-<v-card class="pa-4" width="140" height="140">
+<v-card class="mt-4 pa-4 bg-white rounded-lg" width="140" height="140" flat >
   <v-row justify="start" align="center">
     <v-btn
       size="x-small"
