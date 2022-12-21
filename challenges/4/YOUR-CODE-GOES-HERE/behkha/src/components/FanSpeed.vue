@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-3">
+  <div class="container">
     <div class="d-flex flex-row justify-content-end">
       <h4>Speed</h4>
     </div>
