@@ -8,6 +8,7 @@
       :class="getRotation"
       />
     </div>
+    <div class="fan-center"></div>
     <div class="fan-stand"></div>
   </div>
 </template>
@@ -49,45 +50,54 @@ export default defineComponent({
 }
 
 .fan {
+
   display: flex;
   flex-direction: column;
   z-index: 3 !important;
   margin-bottom: 12px;
-}
 
-.fan-border {
-  border: 1.5px solid white;
-  border-radius: 50%;
-}
-
-.fan-stand {
-  width: 12px;
-  height: 25%;
-  background-color: white;
-  position: absolute;
-  bottom: 0;
-  z-index: 2 !important;
-}
-
-.fan-rotation {
-  animation-name: rotation;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-
-  &__simple {
-    animation-timing-function: linear;
+  &-border {
+    border: 1.5px solid white;
+    border-radius: 50%;
   }
 
-  &__oceanic {
-    animation-timing-function: ease-in-out;
+  &-center {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    position: absolute;
   }
 
-  &__tropical {
-    animation-timing-function: ease;
+  &-stand {
+    width: 12px;
+    height: 25%;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    z-index: 2 !important;
   }
 
-  &__woodsy {
-    animation-timing-function: cubic-bezier(0.5, 0.36, 0.55, 0.84);
+  &-rotation {
+    animation-name: rotation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+
+    &__simple {
+      animation-timing-function: linear;
+    }
+
+    &__oceanic {
+      animation-timing-function: ease-in-out;
+    }
+
+    &__tropical {
+      animation-timing-function: ease;
+    }
+
+    &__woodsy {
+      animation-timing-function: cubic-bezier(0.5, 0.36, 0.55, 0.84);
+    }
   }
 }
 
