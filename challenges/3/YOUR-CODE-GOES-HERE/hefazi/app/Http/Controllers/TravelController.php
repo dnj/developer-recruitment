@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
+use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Models\Travel;
@@ -51,9 +52,38 @@ class TravelController extends Controller
 	{
 	}
 
-	public function passengerOnBoard()
-	{
-	}
+	public function passengerOnBoard(Travel $travel): JsonResponse
+    {
+        // $travel = $travel->with('events')->first();
+
+        if ($travel->passenger_id == auth()->id()) {
+            abort(403);
+        }
+
+        if (!$travel->driverHasArrivedToOrigin()) {
+            throw new CarDoesNotArrivedAtOriginException();
+        }
+
+        $found = false;
+        foreach ($travel->events as $e) {
+            if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found || ($travel->status == TravelStatus::DONE)) {
+            throw new InvalidTravelStatusForThisActionException();
+        }
+
+        $travel->events()->create([
+            'type' => TravelEventType::PASSENGER_ONBOARD->value
+        ]);
+
+        return response()->json([
+            'travel' => $travel->with('events')->first()->toArray()
+        ]);
+    }
 
 	public function done()
 	{
