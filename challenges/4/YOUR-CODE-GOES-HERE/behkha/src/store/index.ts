@@ -6,8 +6,7 @@ export default createStore<RootState>({
     power: false,
     oscillation: false,
     speed: 1,
-    rotation_mode: 'simple',
-    rotation_animation: 'linear'
+    rotation_mode: 'simple'
   },
   mutations: {
     updatePower(state, payload: boolean) {
@@ -24,10 +23,6 @@ export default createStore<RootState>({
 
     updateRotationMode(state, payload: string) {
       state.rotation_mode = payload;
-    },
-
-    updateRotationAnimation(state, payload: string) {
-      state.rotation_animation = payload;
     }
   },
   getters: {
@@ -45,10 +40,6 @@ export default createStore<RootState>({
 
     getRotationMode(state) : string {
       return state.rotation_mode;
-    },
-
-    getRotationAnimation(state) : string {
-      return state.rotation_animation;
     }
   }
 })
