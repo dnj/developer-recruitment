@@ -1,22 +1,32 @@
 <template>
   <div id="container" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="fan fan-oscillation">
+    <div class="fan" :class="oscillationClassObject">
       <img
       src="@/assets/blades.svg"
       alt="blades"
       class="fan-border"
-      :class="getRotation"
+      :class="rotationClassObject"
       />
     </div>
-    <div class="fan-center fan-oscillation"></div>
+    <div class="fan-center" :class="oscillationClassObject"></div>
     <div class="fan-stand"></div>
-    <div class="fan-border__inner-1 fan-oscillation"></div>
-    <div class="fan-border__inner-2 fan-oscillation"></div>
+    <div class="fan-border__inner-1" :class="oscillationClassObject"></div>
+    <div class="fan-border__inner-2" :class="oscillationClassObject"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
+
+interface Rotation {
+  [key: string]: boolean;
+}
+
+interface Oscillation {
+  'fan-oscillation': boolean;
+}
+
 export default defineComponent({
   name: "Fan",
   data() {
@@ -28,15 +38,20 @@ export default defineComponent({
     }
   },
   computed: {
-    getRotation(): object {
-      interface Rotation {
-        [key: string]: boolean;
-      }
+    ...mapGetters(['getPower', 'getOscillation', 'getSpeed', 'getRotationMode']),
+    rotationClassObject(): object {
       let rotation: Rotation = {
-        'fan-rotation': this.fanRotation.status
+        'fan-rotation': this.getPower
       }
-      rotation[`fan-rotation__` + this.fanRotation.type] = this.fanRotation.status;
+      rotation[`fan-rotation__` + this.getRotationMode] = this.getPower;
       return rotation
+    },
+
+    oscillationClassObject() : object {
+      let oscillation: Oscillation = {
+        'fan-oscillation': this.getOscillation && this.getPower
+      }
+      return oscillation
     }
   }
 });
