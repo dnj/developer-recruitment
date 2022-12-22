@@ -16,6 +16,7 @@
     <div class="fan-border__inner-2" :class="oscillationClassObject"></div>
     <div class="fan-border__inner-3" :class="oscillationClassObject"></div>
     <div class="fan-stand"></div>
+    
   </div>
 </template>
 
@@ -60,8 +61,12 @@ export default defineComponent({
     },
 
     getRotationSpeed(): number {
-      let speed = this.getSpeed;
-      return (speed == 1) ? 3 : (speed == 2) ? 1 : (speed == 3) ? 0.4 : speed
+      let oldMax: number = 100;
+      let oldMin: number = 10;
+      let newMax: number = 0.4;
+      let newMin: number = 3;
+      let value: number = this.getSpeed;
+      return ( (value - oldMin) / (oldMax - oldMin) ) * (newMax - newMin) + newMin
     }
   }
 });
