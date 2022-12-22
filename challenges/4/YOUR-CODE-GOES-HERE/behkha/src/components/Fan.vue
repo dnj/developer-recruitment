@@ -79,7 +79,7 @@ export default defineComponent({
 .fan {
 
   margin-bottom: 12px;
-  background: radial-gradient(circle, rgba(255,255,255,1) 15%, rgba(255,255,255,0) 100%);
+  background: radial-gradient(circle, rgba(255,255,255,1) 10%, rgba(255,255,255,0.25) 100%);
   border-radius: 50%;
 
   &-border {
