@@ -1,42 +1,64 @@
 <template>
-<v-card class="mt-4 pa-4 bg-white rounded-lg" width="45%" height="120" flat >
-  <v-row justify="start" align="center">
-    <v-btn
-      size="x-small"
-      class="ma-2"
-      color="cyan-darken-2"
-      icon="mdi-code-tags"
-    ></v-btn>
-    چرخش
-  </v-row>
-  <v-row justify="space-between" align="center">
-    <p class="ma-2">روشن</p>
-    <div>
-      <v-switch
-        v-model="active"
-        :disabled="!active"
-        class="ma-2"
-        color="cyan-darken-2"
-        hide-details
-      ></v-switch>
-    </div>
+  <v-card  class="mt-4 pa-4 bg-white rounded-lg" width="45%"  flat>
+    <v-row justify="start" align="center">
+      <v-btn
+        flat
+        size="x-small"
+        class="ma-2 text-white button-box-icon"
+        color="#30859F"
+        :icon="iconName"
+      ></v-btn>
 
-  </v-row>
+      {{ title }}
+    </v-row>
+    <v-row justify="space-between" align="center">
+      <p class="ma-2">{{ switchName }}</p>
+      <div>
+        <v-switch
+          :model-value="modelValue"
+          @update:modelValue="$emit('update:modelValue', $event)"
+          class="ma-2"
+          color="cyan-darken-2"
+          hide-details
+        ></v-switch>
+      </div>
 
-</v-card>
+    </v-row>
+
+  </v-card>
 </template>
 
 <script>
 export default {
   name: "BaseButtonBox",
-  data(){
+  props: {
+    title: {
+      type: String,
+      default: 'نام'
+    },
+    switchName: {
+      type: String,
+      default: 'غیرفعال'
+    },
+    modelValue:{
+      type: Boolean,
+      default: false
+    },
+    iconName:{
+      type: String,
+    }
+  },
+  data() {
     return {
-      active:true
+      active: true
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.button-box-icon {
+  cursor: default;
 
+}
 </style>

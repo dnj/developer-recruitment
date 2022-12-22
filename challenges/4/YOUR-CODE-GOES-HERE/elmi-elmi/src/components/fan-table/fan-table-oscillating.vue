@@ -1,7 +1,7 @@
 <template>
   <div class=" d-flex justify-center align-center fan-table-oscillating " >
-    <div class="head">
-    <img class=" rotate" height="150"  src="src/assets/blades.svg" alt="oscillating">
+    <div  :class="{'head':rotateSwitch && powerSwitch}">
+    <img :class="{'rotate':powerSwitch}" height="150"  src="src/assets/blades.svg" alt="oscillating">
     </div>
   </div>
 
@@ -13,6 +13,16 @@ export default {
   data(){
     return {
       speed: 1 + 's'
+    }
+  },
+  props:{
+    powerSwitch:{
+      type: Boolean,
+      default: false
+    },
+    rotateSwitch: {
+      type: Boolean,
+      default: false
     }
   }
 }

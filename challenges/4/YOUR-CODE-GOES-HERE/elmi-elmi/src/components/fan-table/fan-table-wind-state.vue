@@ -1,40 +1,40 @@
 <template>
-<v-container>
-  حالت باد
-  <BaseList/>
+  <v-container>
+    <h2 class="text-h6">حالت باد</h2>
 
-      <div  class="d-flex flex-row  ">
-        <v-card
-          flat
-          v-for="state in states"
-          class="d-flex rounded-lg flex-column align-center py-2 px-4 fan-table-states  "
-          :class="{'active-mode': state.selected}">
-          <v-icon>{{state.icon}}</v-icon>
-          <p class="text-body-1">{{ state.text }}</p>
-        </v-card>
-      </div>
+    <div class="d-flex flex-row">
+      <v-card
+        flat
+        v-for="state in states"
+        class="d-flex rounded-lg flex-column align-center py-2 px-4 fan-table-states  "
+        :class="{'active-mode': state.selected}">
+        <v-icon>{{ state.icon }}</v-icon>
+        <p class="text-body-1">{{ state.text }}</p>
+      </v-card>
+    </div>
 
-</v-container>
+  </v-container>
 </template>
 
 <script>
 import BaseList from "@/components/ui/base/base-list";
+
 export default {
   name: "FanTableWindState",
   components: {BaseList},
-  data(){
+  data() {
     return {
       toggle_exclusive: 0,
       states: [
         {
           icon: 'mdi-tailwind',
           text: 'ساده',
-          selected:true
+          selected: true
         },
         {
           icon: 'mdi-waves',
           text: 'اقیانوسی',
-          selected:false
+          selected: false
         },
         {
           icon: 'mdi-white-balance-sunny',
@@ -43,7 +43,7 @@ export default {
         {
           icon: 'mdi-pine-tree',
           text: 'جنگلی',
-          selected:false
+          selected: false
         },
       ]
     }
@@ -55,7 +55,9 @@ export default {
 .fan-table-states {
   margin: 4px;
   width: 25%;
+  cursor: pointer;
 }
+
 .active-mode {
   background-color: #30849E;
   color: white;
