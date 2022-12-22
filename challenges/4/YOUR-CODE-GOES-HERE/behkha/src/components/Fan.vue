@@ -14,6 +14,7 @@
     <div class="fan-center" :class="oscillationClassObject"></div>
     <div class="fan-border__inner-1" :class="oscillationClassObject"></div>
     <div class="fan-border__inner-2" :class="oscillationClassObject"></div>
+    <div class="fan-border__inner-3" :class="oscillationClassObject"></div>
     <div class="fan-stand"></div>
   </div>
 </template>
@@ -86,8 +87,8 @@ export default defineComponent({
     border-radius: 50%;
 
     &__inner-1 {
-      width: 90px;
-      height: 90px;
+      width: 77.5px;
+      height: 77.5px;
       background-color: transparent;
       border: 1.5px solid white;
       border-radius: 50%;
@@ -96,8 +97,18 @@ export default defineComponent({
     }
 
     &__inner-2 {
-      width: 130px;
-      height: 130px;
+      width: 105px;
+      height: 105px;
+      background-color: transparent;
+      border: 1.5px solid white;
+      border-radius: 50%;
+      position: absolute;
+      margin-bottom: 12px;
+    }
+
+    &__inner-3 {
+      width: 132.5px;
+      height: 132.5px;
       background-color: transparent;
       border: 1.5px solid white;
       border-radius: 50%;
