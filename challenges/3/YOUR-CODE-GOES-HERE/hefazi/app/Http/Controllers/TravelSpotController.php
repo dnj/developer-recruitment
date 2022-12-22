@@ -23,12 +23,12 @@ class TravelSpotController extends Controller
 		if ($travel->status == TravelStatus::CANCELLED) {
 			throw new InvalidTravelStatusForThisActionException();
 		}
-		
-		if ($travel->spots()->where('position', 0)->whereNotNull('arrived_at')->exists()) {
+
+		if ($travel->spots()->where('position', $spot->position)->whereNotNull('arrived_at')->exists()) {
 			throw new SpotAlreadyPassedException();
 		}
 
-		$travel->spots()->where('position', 0)->update([
+		$travel->spots()->where('position', $spot->position)->update([
 			'arrived_at' => Carbon::now()
 		]);
 
