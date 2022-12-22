@@ -25,8 +25,8 @@ export default {
   components: {BaseButtonBox},
   data() {
     return {
-      rotate: false,
-      power: true
+      // rotate: false,
+      // power: true
     }
   },
   computed: {
@@ -61,6 +61,7 @@ export default {
       default: false
     }
   },
+
 
 
 }

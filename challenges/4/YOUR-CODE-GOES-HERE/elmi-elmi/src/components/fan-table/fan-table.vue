@@ -11,12 +11,13 @@
     />
     <FanTableActions
       :power-switch="powerSwitch" :rotate-switch="rotateSwitch"
-      @togglePower="powerSwitch = $event"
-      @toggleRotate="rotateSwitch = $event"
+      @togglePower="togglePower($event)"
+      @toggleRotate="toggleRotate($event)"
     />
     <FanTableRotateSpeed
       :fan-speed="fanSpeed"
       @update:modelValue="fanSpeed=$event"
+      :is-power-on="powerSwitch"
     />
     <FanTableWindState
       @windMode="changeWindMode"
@@ -51,7 +52,7 @@ export default {
         {
           icon: 'mdi-tailwind',
           text: 'ساده',
-          selected: true,
+          selected: false,
           mode:'Normal'
         },
         {
@@ -79,9 +80,16 @@ export default {
     speed() {
       return 1 / this.fanSpeed + 's'
     },
-    state(){
-      const state = this.states.find(state => state.selected)
-      return state.mode
+    state:{
+      get(){
+        const state = this.states.find(state => state.selected)
+        return state?.mode
+      },
+      set(val){
+        const state = this.states[0]
+        state.selected = val;
+      }
+
     }
   },
   methods: {
@@ -92,16 +100,46 @@ export default {
     },
     changeWindMode(e) {
       const preState = this.states.find(state=>state.selected === true)
-      preState.selected = false;
+      if(preState?.selected) preState.selected = false;
       const state = this.states.find(state=>state.mode===e)
       state.selected = true
-    }
+      this.toggleRotate(true)
+    },
+    togglePower(e){
+      this.powerSwitch = e;
+      if(this.powerSwitch === false) {
+        this.rotateSwitch = false
+        const preState = this.states.find(state=>state.selected === true)
+        if(preState?.selected) preState.selected = false;
+      }
+    },
+    toggleRotate(e){
+      this.rotateSwitch = e;
+      if(this.rotateSwitch === true) {
+        this.powerSwitch = true
+        if(!this.state) this.state = true;
+      }
+      if(this.rotateSwitch === false){
+        const preState = this.states.find(state=>state.selected === true)
+        if(preState?.selected) preState.selected = false;
+      }
+    },
+  },
+  watch:{
+    // rotateSwitch(val,preVal){
+    //   if(val) this.powerSwitch = true;
+    // },
+    // powerSwitch(val,preVal){
+    //   if(!val) {
+    //     this.rotateSwitch = false
+    //     const preState = this.states.find(state=>state.selected === true)
+    //     if(preState?.selected) preState.selected = false;
+    //   }
+    // },
+    // state(val){
+    //   this.rotateSwitch =  true;
+    // }
   }
-  // watch:{
-  //   powerSwitch(val,preVal){
-  //     if(!val) this.rotateSwitch = false;
-  //   }
-  // }
 }
 </script>
 

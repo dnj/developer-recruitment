@@ -12,9 +12,15 @@
       :min="0"
       :max="5"
       :step="0.2"
-      thumb-label
+      thumb-label="always"
       color="cyan-darken-2"
-    ></v-slider>
+      :disabled="!isPowerOn"
+    >
+      <template v-slot:thumb-label="{ modelValue }">
+        {{ velocity[Math.min(Math.floor(modelValue / 2), 2)] }}
+      </template>
+
+    </v-slider>
   </v-container>
 </template>
 
@@ -24,12 +30,17 @@ export default {
   data() {
     return {
       value: 0,
+      velocity:['کم','متوسط','زیاد']
     }
   },
   props: {
     fanSpeed: {
       type: Number,
       default: 1
+    },
+    isPowerOn:{
+      type: Boolean,
+      default: false
     }
   }
 }

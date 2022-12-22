@@ -1,10 +1,9 @@
 <template>
-  <div class="d-flex justify-center align-center fan-table-oscillating" >
-    <div  :class="{'head':rotateSwitch && powerSwitch}">
-    <img :class="{'rotate':powerSwitch}" height="150"  src="src/assets/blades.svg" alt="oscillating">
+    <div class="d-flex justify-center align-center fan-table-oscillating" >
+      <div  :class="{'head':rotateSwitch && powerSwitch}">
+        <img :class="{'rotate':powerSwitch}" height="150"  src="src/assets/blades.svg" alt="oscillating">
+      </div>
     </div>
-  </div>
-
 </template>
 
 <script>
@@ -51,9 +50,6 @@ export default {
   height: 300px;
   width: 100%;
   background-color: #30849E;
-  ::before{
-    content: '10000';
-  }
 }
 .rotate{
   animation: rotate v-bind(speed) linear infinite;
