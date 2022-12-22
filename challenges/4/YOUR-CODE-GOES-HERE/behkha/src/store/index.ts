@@ -5,7 +5,7 @@ export default createStore<RootState>({
   state: {
     power: false,
     oscillation: false,
-    speed: 1,
+    speed: 10,
     rotation_mode: 'simple'
   },
   mutations: {

@@ -16,7 +16,6 @@
     <div class="fan-border__inner-2" :class="oscillationClassObject"></div>
     <div class="fan-border__inner-3" :class="oscillationClassObject"></div>
     <div class="fan-stand"></div>
-    
   </div>
 </template>
 
@@ -86,6 +85,7 @@ export default defineComponent({
   margin-bottom: 12px;
   background: radial-gradient(circle, rgba(255,255,255,1) 10%, rgba(255,255,255,0.25) 100%);
   border-radius: 50%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 
   &-border {
     border: 1.5px solid white;
