@@ -4,7 +4,7 @@
       <h5>{{title}}</h5>
     </div>
     <div class="d-flex flex-row justify-content-between mt-3">
-      <SwitchButton class="my-auto" @toggle="status = !status"/>
+      <SwitchButton class="my-auto" @toggle="onSwitchToggle"/>
       <h5 class="mt-1">{{(status ? 'On' : 'Off')}}</h5>
     </div>
   </div>
@@ -28,6 +28,12 @@ export default defineComponent({
   data() {
     return {
       status: false,
+    }
+  },
+  methods: {
+    onSwitchToggle() {
+      this.status = !this.status;
+      this.$emit('toggle', this.status)
     }
   }
 })
