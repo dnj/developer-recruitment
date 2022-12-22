@@ -38,10 +38,10 @@ export default defineComponent({
   border-radius: 12px;
   border: none;
   transition: all 0.3s ease;
-}
 
-.card.selected {
-  background-color: var(--primary-color);
-  color: white;
+  &.selected {
+    background-color: var(--primary-color);
+    color: white;
+  }
 }
 </style>
