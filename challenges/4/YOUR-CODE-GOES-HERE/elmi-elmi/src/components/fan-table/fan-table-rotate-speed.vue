@@ -1,10 +1,12 @@
 <template>
 <v-container>
-سرعت چرخش
+  <h2 class="text-h6">سرعت چرخش</h2>
   <v-slider
     v-model="value"
+    :model-value="fanSpeed"
+    @update:modelValue="$emit('update:modelValue',$event)"
     :min="0"
-    :max="1"
+    :max="5"
     :step="0.2"
     thumb-label
     color="cyan-darken-2"
@@ -20,6 +22,12 @@ export default {
       value: 0,
     }
   },
+  props:{
+    fanSpeed:{
+      type: Number,
+      default: 1
+    }
+  }
 }
 </script>
 

@@ -3,12 +3,17 @@
     <!--  <h1>-->
     <!--    {{ $vuetify.locale.t('$vuetify.aaa') }}-->
     <!--  </h1>-->
-    <FanTableOscillating :power-switch="powerSwitch" :rotate-switch="rotateSwitch"/>
+    <FanTableOscillating
+      :speed="speed"
+      :power-switch="powerSwitch" :rotate-switch="rotateSwitch"/>
     <FanTableActions :power-switch="powerSwitch" :rotate-switch="rotateSwitch"
                      @togglePower="powerSwitch = $event"
                      @toggleRotate="rotateSwitch = $event"
     />
-    <FanTableRotateSpeed/>
+    <FanTableRotateSpeed
+      :fan-speed="fanSpeed"
+      @update:modelValue="fanSpeed=$event"
+    />
     <FanTableWindState/>
 
 
@@ -29,12 +34,21 @@ export default {
     return {
       powerSwitch: false,
       rotateSwitch: false,
+      fanSpeed: 1
     }
   },
-  // methods:{
-  //   togglePower(){},
-  //   toggleRotate(),
-  // }
+  computed:{
+    speed(){
+      return 1/this.fanSpeed +'s'
+    }
+  },
+  methods: {
+    // togglePower(){},
+    // toggleRotate(),
+    ttt(e) {
+      console.log('----', e)
+    }
+  }
   // watch:{
   //   powerSwitch(val,preVal){
   //     if(!val) this.rotateSwitch = false;

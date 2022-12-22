@@ -12,7 +12,7 @@ export default {
   name: "FanTableOscillating",
   data(){
     return {
-      speed: 1 + 's'
+      // speed: 1 + 's'
     }
   },
   props:{
@@ -23,6 +23,10 @@ export default {
     rotateSwitch: {
       type: Boolean,
       default: false
+    },
+    speed:{
+      type: String,
+      default: '1s'
     }
   }
 }

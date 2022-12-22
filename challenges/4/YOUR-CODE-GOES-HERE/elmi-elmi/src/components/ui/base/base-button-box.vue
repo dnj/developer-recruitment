@@ -1,4 +1,5 @@
 <template>
+<!--  change name to panel-->
   <v-card  class="mt-4 pa-4 bg-white rounded-lg" width="45%"  flat>
     <v-row justify="start" align="center">
       <v-btn
