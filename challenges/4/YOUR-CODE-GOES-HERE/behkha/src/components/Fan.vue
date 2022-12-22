@@ -6,6 +6,9 @@
       alt="blades"
       class="fan-border"
       :class="rotationClassObject"
+      :style="{
+        animationDuration: `${getSpeed}s`
+      }"
       />
     </div>
     <div class="fan-center" :class="oscillationClassObject"></div>
@@ -38,7 +41,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getPower', 'getOscillation', 'getSpeed', 'getRotationMode']),
+    ...mapGetters(['getPower', 'getOscillation', 'getSpeed', 'getRotationMode', 'getRotationAnimation']),
+
     rotationClassObject(): object {
       let rotation: Rotation = {
         'fan-rotation': this.getPower
@@ -121,8 +125,9 @@ export default defineComponent({
   }
 
   &-rotation {
+
     animation-name: rotation;
-    animation-duration: 2s;
+    animation-duration: 5s;
     animation-iteration-count: infinite;
 
     &__simple {

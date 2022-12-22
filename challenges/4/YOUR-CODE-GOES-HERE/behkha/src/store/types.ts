@@ -3,4 +3,5 @@ export interface RootState {
   oscillation: boolean;
   speed: number;
   rotation_mode: string;
+  rotation_animation: string;
 }

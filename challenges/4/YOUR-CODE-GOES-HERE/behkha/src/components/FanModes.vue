@@ -6,7 +6,7 @@
     <div class="mt-3">
       <div class="row">
         <div class="col-3 col-md-12" v-for="mode in modes" :key="mode.id">
-          <FanModeItem :title="mode.title" @click="onFanModeSelect(mode.title)" :selected="getRotationMode === mode.title"/>
+          <FanModeItem :title="mode.title" @click="onFanModeSelect(mode.title, mode.animation)" :selected="getRotationMode === mode.title"/>
         </div>
       </div>
     </div>
@@ -25,17 +25,18 @@ export default defineComponent({
   data() {
     return {
       modes: [
-        { id: 1, title: 'simple' },
-        { id: 2, title: 'oceanic' },
-        { id: 3, title: 'tropical' },
-        { id: 4, title: 'woodsy' },
+        { id: 1, title: 'simple', animation: 'linear' },
+        { id: 2, title: 'oceanic', animation: 'ease-in-out' },
+        { id: 3, title: 'tropical', animation: 'ease' },
+        { id: 4, title: 'woodsy', animation: 'cubic-bezier(0.5, 0.36, 0.55, 0.84)' },
       ]
     }
   },
   methods: {
-    ...mapMutations(['updateRotationMode']),
-    onFanModeSelect(title: string) {
+    ...mapMutations(['updateRotationMode', 'updateRotationAnimation']),
+    onFanModeSelect(title: string, animation: string) {
       this.updateRotationMode(title);
+      this.updateRotationAnimation(animation);
     }
   },
   computed: {
