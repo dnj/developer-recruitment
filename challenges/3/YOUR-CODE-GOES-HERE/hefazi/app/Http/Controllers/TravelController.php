@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
+use App\Exceptions\AllSpotsDidNotPassException;
 use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
@@ -41,9 +42,9 @@ class TravelController extends Controller
 
 		return response()->json([
 			'travel' => [
-				'spots'        => $request->spots,
+				'spots' => $request->spots,
 				'passenger_id' => auth()->id(),
-				'status'       => TravelStatus::SEARCHING_FOR_DRIVER->value
+				'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
 			]
 		], 201);
 	}
@@ -53,40 +54,63 @@ class TravelController extends Controller
 	}
 
 	public function passengerOnBoard(Travel $travel): JsonResponse
-    {
-        // $travel = $travel->with('events')->first();
-
-        if ($travel->passenger_id == auth()->id()) {
-            abort(403);
-        }
-
-        if (!$travel->driverHasArrivedToOrigin()) {
-            throw new CarDoesNotArrivedAtOriginException();
-        }
-
-        $found = false;
-        foreach ($travel->events as $e) {
-            if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
-                $found = true;
-                break;
-            }
-        }
-
-        if ($found || ($travel->status == TravelStatus::DONE)) {
-            throw new InvalidTravelStatusForThisActionException();
-        }
-
-        $travel->events()->create([
-            'type' => TravelEventType::PASSENGER_ONBOARD->value
-        ]);
-
-        return response()->json([
-            'travel' => $travel->with('events')->first()->toArray()
-        ]);
-    }
-
-	public function done()
 	{
+		if ($travel->passenger_id == auth()->id()) {
+			abort(403);
+		}
+
+		if (!$travel->driverHasArrivedToOrigin()) {
+			throw new CarDoesNotArrivedAtOriginException();
+		}
+
+		$found = false;
+		foreach ($travel->events as $e) {
+			if ($e->type == TravelEventType::PASSENGER_ONBOARD) {
+				$found = true;
+				break;
+			}
+		}
+
+		if ($found || ($travel->status == TravelStatus::DONE)) {
+			throw new InvalidTravelStatusForThisActionException();
+		}
+
+		$travel->events()->create([
+			'type' => TravelEventType::PASSENGER_ONBOARD->value
+		]);
+
+		return response()->json([
+			'travel' => $travel->with('events')->first()->toArray()
+		]);
+	}
+
+	public function done(Travel $travel): JsonResponse
+	{
+		$travel = $travel->with('events')->first();
+
+		if ($travel->passenger_id == auth()->id()) {
+			abort(403);
+		}
+
+		if ($travel->status == TravelStatus::DONE) {
+			throw new InvalidTravelStatusForThisActionException();
+		}
+
+		if ($travel->allSpotsPassed() && $travel->passengerIsInCar()) {
+			$travel->status = TravelStatus::DONE->value;
+			$travel->save();
+
+			$travel->events()->create([
+				'type' => TravelEventType::DONE->value
+			]);
+
+			$travel = $travel->with('events')->first();
+
+			return response()->json([
+				'travel' => $travel->toArray()
+			]);
+		}
+		throw new AllSpotsDidNotPassException();
 	}
 
 	public function take(Travel $travel): JsonResponse
