@@ -9,9 +9,9 @@
       />
     </div>
     <div class="fan-center" :class="oscillationClassObject"></div>
-    <div class="fan-stand"></div>
     <div class="fan-border__inner-1" :class="oscillationClassObject"></div>
     <div class="fan-border__inner-2" :class="oscillationClassObject"></div>
+    <div class="fan-stand"></div>
   </div>
 </template>
 
