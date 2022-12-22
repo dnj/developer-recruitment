@@ -11,7 +11,17 @@ class TravelSpot extends Model
 
     protected $table = "travels_spots";
 
-    public function travel() {
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'position',
+        'latitude',
+        'longitude'
+    ];
+
+    public function travel()
+    {
         return $this->belongsTo(Travel::class);
     }
 }
