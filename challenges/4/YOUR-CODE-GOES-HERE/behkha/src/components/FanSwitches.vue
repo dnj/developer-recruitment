@@ -2,10 +2,10 @@
   <div class="container">
     <div class="row">
       <div class="col-6">
-        <Switch title="Oscillation" @toggle="onOscillationToggle"/>
+        <Switch title="چرخش" @toggle="onOscillationToggle"/>
       </div>
       <div class="col-6">
-        <Switch title="Power" @toggle="onPowerToggle"/>
+        <Switch title="دستگاه" @toggle="onPowerToggle"/>
       </div>
     </div>
   </div>

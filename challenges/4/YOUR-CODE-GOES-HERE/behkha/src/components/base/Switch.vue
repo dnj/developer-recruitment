@@ -5,7 +5,7 @@
     </div>
     <div class="d-flex flex-row justify-content-between mt-3">
       <SwitchButton class="my-auto" @toggle="onSwitchToggle"/>
-      <h5 class="mt-1">{{(status ? 'On' : 'Off')}}</h5>
+      <h5 class="mt-1">{{(status ? 'روشن' : 'خاموش')}}</h5>
     </div>
   </div>
 </template>

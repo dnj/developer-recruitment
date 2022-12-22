@@ -80,7 +80,6 @@ export default defineComponent({
   margin-bottom: 12px;
   background: radial-gradient(circle, rgba(255,255,255,1) 15%, rgba(255,255,255,0) 100%);
   border-radius: 50%;
-  // box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.5);
 
   &-border {
     border: 1.5px solid white;
@@ -120,7 +119,7 @@ export default defineComponent({
   &-stand {
     width: 12px;
     height: 25%;
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(204,204,204,1) 100%);
+    background: linear-gradient(90deg, rgba(255,255,255,1) 100%, rgba(204,204,204,1) 100%);
     position: absolute;
     bottom: 0;
   }
