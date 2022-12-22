@@ -2,37 +2,18 @@
 <v-container>
   حالت باد
   <BaseList/>
-  <v-btn-toggle v-model="toggle_exclusive" color="cyan-darken-2">
-    <v-btn rounded="lg" class=" ml-1">
-      <div class="d-flex flex-column align-center">
-        <v-icon>mdi-tailwind</v-icon>
-        <p class="text-body-1">ساده</p>
+
+      <div  class="d-flex flex-row  ">
+        <v-card
+          flat
+          v-for="state in states"
+          class="d-flex rounded-lg flex-column align-center py-2 px-4 fan-table-states  "
+          :class="{'active-mode': state.selected}">
+          <v-icon>{{state.icon}}</v-icon>
+          <p class="text-body-1">{{ state.text }}</p>
+        </v-card>
       </div>
 
-    </v-btn>
-    <v-btn rounded="lg" class=" ml-1">
-      <div class="d-flex flex-column align-center">
-        <v-icon>mdi-waves</v-icon>
-        <p class="text-body-1">اقیانوسی</p>
-      </div>
-
-    </v-btn>
-    <v-btn rounded="lg" class=" ml-1">
-      <div class="d-flex flex-column align-center">
-        <v-icon>mdi-white-balance-sunny</v-icon>
-        <p class="text-body-1">استوایی</p>
-      </div>
-
-    </v-btn>
-    <v-btn rounded="lg" class="">
-      <div class="d-flex flex-column align-center">
-        <v-icon>mdi-pine-tree</v-icon>
-        <p class="text-body-1">جنگلی</p>
-      </div>
-
-    </v-btn>
-
-  </v-btn-toggle>
 </v-container>
 </template>
 
@@ -42,11 +23,41 @@ export default {
   name: "FanTableWindState",
   components: {BaseList},
   data(){
-    return { toggle_exclusive: 0}
+    return {
+      toggle_exclusive: 0,
+      states: [
+        {
+          icon: 'mdi-tailwind',
+          text: 'ساده',
+          selected:true
+        },
+        {
+          icon: 'mdi-waves',
+          text: 'اقیانوسی',
+          selected:false
+        },
+        {
+          icon: 'mdi-white-balance-sunny',
+          text: 'استوایی'
+        },
+        {
+          icon: 'mdi-pine-tree',
+          text: 'جنگلی',
+          selected:false
+        },
+      ]
+    }
   }
 }
 </script>
 
 <style scoped>
-
+.fan-table-states {
+  margin: 4px;
+  width: 25%;
+}
+.active-mode {
+  background-color: #30849E;
+  color: white;
+}
 </style>

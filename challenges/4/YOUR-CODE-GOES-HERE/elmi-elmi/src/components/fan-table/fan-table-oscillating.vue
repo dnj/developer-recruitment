@@ -1,8 +1,7 @@
 <template>
-  <div class="d-flex justify-center align-center  fan-table-oscillating" >
+  <div class=" d-flex justify-center align-center fan-table-oscillating " >
     <div class="head">
     <img class=" rotate" height="150"  src="src/assets/blades.svg" alt="oscillating">
-
     </div>
   </div>
 
@@ -19,7 +18,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss"  scoped>
 .fan-table-oscillating {
   height: 300px;
   width: 100%;
@@ -30,13 +29,9 @@ export default {
 }
 
 .head{
-  animation: rotate v-bind(speed) linear infinite, rotate-head 3s infinite linear;
+  animation:  rotate-head 3s infinite linear;
 }
 
-/*@keyframes rotation {*/
-/*  50%{ transform:rotatey(180deg) }*/
-/*  100%{ transform:rotatey(0) }*/
-/*}*/
 @keyframes rotate-head {
   0% {
     transform:  rotate3d(0, 0, 0, 0deg);
