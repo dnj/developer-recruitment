@@ -130,7 +130,7 @@ export default defineComponent({
   &-stand {
     width: 12px;
     height: 25%;
-    background: linear-gradient(90deg, rgba(255,255,255,1) 100%, rgba(204,204,204,1) 100%);
+    background: linear-gradient(180deg, rgba(48,133,159,0.9) 0%, rgba(255,255,255,1) 100%);
     position: absolute;
     bottom: 0;
   }
