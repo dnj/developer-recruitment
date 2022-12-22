@@ -1,10 +1,20 @@
 <?php
+
 namespace App\Http\Controllers;
 
-class AuthController extends Controller {
-	public function register() {
-	}
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 
-	public function user() {
-	}
+class AuthController extends Controller
+{
+    public function register(RegisterRequest $request)
+    {
+        $user = User::create($request->all());
+        return response()->json(UserResource::make($user));
+    }
+
+    public function user()
+    {
+    }
 }
