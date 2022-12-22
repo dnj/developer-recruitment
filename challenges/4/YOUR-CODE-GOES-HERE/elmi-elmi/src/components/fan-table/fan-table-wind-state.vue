@@ -3,31 +3,31 @@
   حالت باد
   <BaseList/>
   <v-btn-toggle v-model="toggle_exclusive" color="cyan-darken-2">
-    <v-btn rounded="lg" class=" ml-4">
+    <v-btn rounded="lg" class=" ml-1">
       <div class="d-flex flex-column align-center">
         <v-icon>mdi-tailwind</v-icon>
-        <div>ساده</div>
+        <p class="text-body-1">ساده</p>
       </div>
 
     </v-btn>
-    <v-btn rounded="lg" class=" ml-4">
+    <v-btn rounded="lg" class=" ml-1">
       <div class="d-flex flex-column align-center">
         <v-icon>mdi-waves</v-icon>
-        <div>اقیانوسی</div>
+        <p class="text-body-1">اقیانوسی</p>
       </div>
 
     </v-btn>
-    <v-btn rounded="lg" class=" ml-4">
+    <v-btn rounded="lg" class=" ml-1">
       <div class="d-flex flex-column align-center">
         <v-icon>mdi-white-balance-sunny</v-icon>
-        <div>استوایی</div>
+        <p class="text-body-1">استوایی</p>
       </div>
 
     </v-btn>
-    <v-btn rounded="lg" class=" ml-4">
+    <v-btn rounded="lg" class="">
       <div class="d-flex flex-column align-center">
         <v-icon>mdi-pine-tree</v-icon>
-        <div>جنگلی</div>
+        <p class="text-body-1">جنگلی</p>
       </div>
 
     </v-btn>

@@ -1,7 +1,9 @@
 <template>
   <v-app>
-    <v-main >
-      <SectionFanTable/>
+    <v-main class="mx-auto" >
+      <v-responsive max-width="320" max-height="745">
+        <SectionFanTable/>
+      </v-responsive>
 <!--      <HelloWorld />-->
     </v-main>
   </v-app>

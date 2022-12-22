@@ -1,12 +1,14 @@
 <template>
-<section class="bg-grey-lighten-5">
+<section class="bg-grey-lighten-5 ">
 <!--  <h1>-->
 <!--    {{ $vuetify.locale.t('$vuetify.aaa') }}-->
 <!--  </h1>-->
-  <FanTableOscillating/>
-  <FanTableActions/>
-  <FanTableRotateSpeed/>
-  <FanTableWindState/>
+    <FanTableOscillating/>
+    <FanTableActions/>
+    <FanTableRotateSpeed/>
+    <FanTableWindState/>
+
+
 </section>
 </template>
 
