@@ -1,5 +1,8 @@
 <template>
-  <div class="card p-2 mb-md-3 d-flex flex-column align-items-center justify-content-center">
+  <div 
+    :class="{ selected: selected }"
+    class="card p-2 mb-md-3 d-flex flex-column align-items-center justify-content-center"
+    >
     <h6>{{getTitle}}</h6>
   </div>
 </template>
@@ -12,6 +15,10 @@ export default defineComponent({
     title: {
       type: String,
       default: 'Title'
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -30,5 +37,11 @@ export default defineComponent({
   background-color: white;
   border-radius: 12px;
   border: none;
+  transition: all 0.3s ease;
+}
+
+.card.selected {
+  background-color: var(--primary-color);
+  color: white;
 }
 </style>

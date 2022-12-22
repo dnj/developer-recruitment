@@ -6,7 +6,7 @@
     <div class="mt-3">
       <div class="row">
         <div class="col-3 col-md-12" v-for="mode in modes" :key="mode.id">
-          <FanModeItem :title="mode.title" @click="onFanModeSelect(mode.title)"/>
+          <FanModeItem :title="mode.title" @click="onFanModeSelect(mode.title)" :selected="getRotationMode === mode.title"/>
         </div>
       </div>
     </div>
@@ -16,7 +16,7 @@
 <script lang="ts">
 import FanModeItem from './FanModeItem.vue'
 import { defineComponent } from 'vue'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default defineComponent({
   name: 'FanModes',
   components: {
@@ -37,6 +37,9 @@ export default defineComponent({
     onFanModeSelect(title: string) {
       this.updateRotationMode(title);
     }
+  },
+  computed: {
+    ...mapGetters(['getRotationMode'])
   }
 })
 </script>
