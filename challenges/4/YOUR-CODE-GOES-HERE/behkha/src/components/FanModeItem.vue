@@ -42,6 +42,8 @@ export default defineComponent({
   &.selected {
     background-color: var(--primary-color);
     color: white;
+    border: 2px solid black;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
   }
 }
 </style>
