@@ -6,6 +6,8 @@ use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
 use App\Exceptions\AllSpotsDidNotPassException;
+use App\Exceptions\CannotCancelFinishedTravelException;
+use App\Exceptions\CannotCancelRunningTravelException;
 use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
@@ -49,8 +51,31 @@ class TravelController extends Controller
 		], 201);
 	}
 
-	public function cancel()
+	public function cancel(Travel $travel): JsonResponse
 	{
+		if (
+			in_array($travel->status, [
+				TravelStatus::CANCELLED,
+				TravelStatus::DONE
+			])
+		) {
+			throw new CannotCancelFinishedTravelException();
+		}
+
+		if (
+			$travel->status == TravelStatus::RUNNING &&
+			($travel->passengerIsInCar() || ($travel->passenger_id == auth()->id()))
+		) {
+			throw new CannotCancelRunningTravelException();
+		}
+
+		$travel->update([
+			'status' => TravelStatus::CANCELLED->value
+		]);
+
+		return response()->json([
+			'travel' => $travel
+		]);
 	}
 
 	public function passengerOnBoard(Travel $travel): JsonResponse
