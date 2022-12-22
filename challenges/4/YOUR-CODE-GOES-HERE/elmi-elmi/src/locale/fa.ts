@@ -8,7 +8,7 @@ export default {
       }
     },
     rotate:{
-      title:'دستگاه',
+      title:'چرخش',
       status:{
         on:'فعال',
         off:'غیرفعال'
@@ -24,10 +24,10 @@ export default {
   wind_status:{
     title: 'حالت باد',
     modes:{
-      simple:'ساده',
+      normal:'ساده',
       oceanic:'اقیانوسی',
       tropical: 'استوایی',
-      silvan: 'جنگلی'
+      woodsy: 'جنگلی'
     }
   }
 

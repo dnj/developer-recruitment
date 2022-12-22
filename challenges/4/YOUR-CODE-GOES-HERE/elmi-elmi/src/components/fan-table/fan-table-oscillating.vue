@@ -1,5 +1,5 @@
 <template>
-  <div class=" d-flex justify-center align-center fan-table-oscillating " >
+  <div class="d-flex justify-center align-center fan-table-oscillating" >
     <div  :class="{'head':rotateSwitch && powerSwitch}">
     <img :class="{'rotate':powerSwitch}" height="150"  src="src/assets/blades.svg" alt="oscillating">
     </div>
@@ -10,11 +10,12 @@
 <script>
 export default {
   name: "FanTableOscillating",
-  data(){
-    return {
-      // speed: 1 + 's'
-    }
-  },
+  // data(){
+  //   return {
+  //     // speed: 1 + 's'
+  //     a:'ease-in-out'
+  //   }
+  // },
   props:{
     powerSwitch:{
       type: Boolean,
@@ -27,6 +28,19 @@ export default {
     speed:{
       type: String,
       default: '1s'
+    },
+    state:{
+      type: String,
+      default:'Simple'
+    }
+  },
+  computed:{
+    animationMOde(){
+      if(this.state === 'Normal') return 'linear'
+      if(this.state === 'Oceanic') return 'ease-in-out'
+      if(this.state === 'Tropical') return 'ease'
+      if(this.state === 'Woodsy') return 'cubic-bezier(0.5,0.36,0.55,0.84)'
+      else return 'linear'
     }
   }
 }
@@ -37,13 +51,16 @@ export default {
   height: 300px;
   width: 100%;
   background-color: #30849E;
+  ::before{
+    content: '10000';
+  }
 }
 .rotate{
   animation: rotate v-bind(speed) linear infinite;
 }
 
 .head{
-  animation:  rotate-head 3s infinite linear;
+  animation:  rotate-head 3s v-bind(animationMOde) infinite ;
 }
 
 @keyframes rotate-head {

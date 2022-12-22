@@ -1,15 +1,26 @@
 <template>
   <v-container>
-    <h2 class="text-h6">حالت باد</h2>
-
+<!--    title-->
+    <h2 class="text-h6">
+      {{
+        $vuetify.locale.t('$vuetify.wind_status.title')
+      }}
+    </h2>
+<!--    modes: [simple oceanic tropical silvan]-->
     <div class="d-flex flex-row">
       <v-card
-        flat
         v-for="state in states"
         class="d-flex rounded-lg flex-column align-center py-2 px-4 fan-table-states  "
-        :class="{'active-mode': state.selected}">
-        <v-icon>{{ state.icon }}</v-icon>
-        <p class="text-body-1">{{ state.text }}</p>
+        :class="{'active-mode': state.selected}"
+        flat
+        @click="$emit('windMode',state.mode)"
+      >
+        <v-icon>
+          {{ state.icon }}
+        </v-icon>
+        <p class="text-body-1">
+          {{ state.text }}
+        </p>
       </v-card>
     </div>
 
@@ -25,27 +36,12 @@ export default {
   data() {
     return {
       toggle_exclusive: 0,
-      states: [
-        {
-          icon: 'mdi-tailwind',
-          text: 'ساده',
-          selected: true
-        },
-        {
-          icon: 'mdi-waves',
-          text: 'اقیانوسی',
-          selected: false
-        },
-        {
-          icon: 'mdi-white-balance-sunny',
-          text: 'استوایی'
-        },
-        {
-          icon: 'mdi-pine-tree',
-          text: 'جنگلی',
-          selected: false
-        },
-      ]
+    }
+  },
+  props:{
+    states:{
+      type: Array,
+      default: []
     }
   }
 }

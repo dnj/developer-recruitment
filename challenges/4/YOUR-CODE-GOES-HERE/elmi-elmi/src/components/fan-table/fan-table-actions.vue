@@ -1,19 +1,20 @@
 <template>
   <v-container>
     <v-row justify="space-around">
-      <BaseButtonBox :switch-name="switchNameSys" title="دستگاه"
+      <BaseButtonBox :switch-name="switchNameSys"
+                     :title="sysTitle"
                      :modelValue="powerSwitch"
                      @update:modelValue="$emit('togglePower', $event)"
                      icon-name="mdi-power"
       />
-      <BaseButtonBox :switch-name="switchNameRotate" title="چرخش"
+      <BaseButtonBox :switch-name="switchNameRotate"
+                     :title="rotateTitle"
                      :modelValue="rotateSwitch"
                      @update:modelValue="$emit('toggleRotate', $event)"
                      icon-name="mdi-code-tags"
       />
     </v-row>
   </v-container>
-
 </template>
 
 <script>
@@ -42,6 +43,12 @@ export default {
         ? status = this.$vuetify.locale.t('$vuetify.panel.rotate.status.on')
         : status = this.$vuetify.locale.t('$vuetify.panel.rotate.status.off')
       return status
+    },
+    sysTitle() {
+      return this.$vuetify.locale.t('$vuetify.panel.system.title')
+    },
+    rotateTitle() {
+      return this.$vuetify.locale.t('$vuetify.panel.rotate.title')
     }
   },
   props: {

@@ -6,7 +6,9 @@
     <FanTableOscillating
       :speed="speed"
       :power-switch="powerSwitch"
-      :rotate-switch="rotateSwitch"/>
+      :rotate-switch="rotateSwitch"
+      :state="state"
+    />
     <FanTableActions
       :power-switch="powerSwitch" :rotate-switch="rotateSwitch"
       @togglePower="powerSwitch = $event"
@@ -16,7 +18,10 @@
       :fan-speed="fanSpeed"
       @update:modelValue="fanSpeed=$event"
     />
-    <FanTableWindState/>
+    <FanTableWindState
+      @windMode="changeWindMode"
+      :states="states"
+    />
 
 
   </section>
@@ -41,12 +46,42 @@ export default {
     return {
       powerSwitch: false,
       rotateSwitch: false,
-      fanSpeed: 1
+      fanSpeed: 1,
+      states: [
+        {
+          icon: 'mdi-tailwind',
+          text: 'ساده',
+          selected: true,
+          mode:'Normal'
+        },
+        {
+          icon: 'mdi-waves',
+          text: 'اقیانوسی',
+          selected: false,
+          mode:'Oceanic'
+        },
+        {
+          icon: 'mdi-white-balance-sunny',
+          text: 'استوایی',
+          mode:'Tropical'
+        },
+        {
+          icon: 'mdi-pine-tree',
+          text: 'جنگلی',
+          selected: false,
+          mode:'Woodsy'
+        },
+      ]
+
     }
   },
   computed: {
     speed() {
       return 1 / this.fanSpeed + 's'
+    },
+    state(){
+      const state = this.states.find(state => state.selected)
+      return state.mode
     }
   },
   methods: {
@@ -54,6 +89,12 @@ export default {
     // toggleRotate(),
     ttt(e) {
       console.log('----', e)
+    },
+    changeWindMode(e) {
+      const preState = this.states.find(state=>state.selected === true)
+      preState.selected = false;
+      const state = this.states.find(state=>state.mode===e)
+      state.selected = true
     }
   }
   // watch:{
