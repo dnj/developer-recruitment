@@ -29,6 +29,7 @@ class Travel extends Model
     protected $fillable = [
         'passenger_id',
         'status',
+        'driver_id'
     ];
 
     protected $casts = array(
