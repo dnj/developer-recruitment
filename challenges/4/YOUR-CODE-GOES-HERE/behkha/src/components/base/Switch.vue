@@ -1,11 +1,11 @@
 <template>
   <div class="card mt-3 p-3">
     <div class="d-flex flex-row-reverse">
-      <h5>{{title}}</h5>
+      <h5 class="black-font">{{title}}</h5>
     </div>
     <div class="d-flex flex-row justify-content-between mt-3">
       <SwitchButton class="my-auto" @toggle="onSwitchToggle"/>
-      <h5 class="mt-1">{{(status ? 'روشن' : 'خاموش')}}</h5>
+      <h6 class="regular-font mt-1">{{(status ? 'روشن' : 'خاموش')}}</h6>
     </div>
   </div>
 </template>

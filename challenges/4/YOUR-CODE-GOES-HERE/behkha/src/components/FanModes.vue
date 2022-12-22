@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="d-flex flex-row justify-content-end">
-      <h4>حالت باد</h4>
+      <h4 class="black-font">حالت باد</h4>
     </div>
     <div class="mt-3">
       <div class="row">

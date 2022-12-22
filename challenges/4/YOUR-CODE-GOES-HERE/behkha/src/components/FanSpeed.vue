@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="d-flex flex-row justify-content-end">
-      <h4>سرعت</h4>
+      <h4 class="black-font">سرعت</h4>
     </div>
     <input
       dir="rtl"

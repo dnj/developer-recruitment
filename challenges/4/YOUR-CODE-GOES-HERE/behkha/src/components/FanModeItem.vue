@@ -3,7 +3,7 @@
     :class="{ selected: selected }"
     class="card p-2 mb-md-3 d-flex flex-column align-items-center justify-content-center"
     >
-    <h6>{{getTitle}}</h6>
+    <h6 class="regular-font my-auto">{{getTitle}}</h6>
   </div>
 </template>
 
