@@ -7,7 +7,7 @@
       class="fan-border"
       :class="rotationClassObject"
       :style="{
-        animationDuration: `${getSpeed}s`
+        animationDuration: `${getRotationSpeed}s`
       }"
       />
     </div>
@@ -56,6 +56,11 @@ export default defineComponent({
         'fan-oscillation': this.getOscillation && this.getPower
       }
       return oscillation
+    },
+
+    getRotationSpeed(): number {
+      let speed = this.getSpeed;
+      return (speed == 1) ? 3 : (speed == 2) ? 1 : (speed == 3) ? 0.4 : speed
     }
   }
 });
