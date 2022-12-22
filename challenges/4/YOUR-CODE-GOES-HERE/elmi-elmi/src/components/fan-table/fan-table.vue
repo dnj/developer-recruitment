@@ -5,10 +5,12 @@
     <!--  </h1>-->
     <FanTableOscillating
       :speed="speed"
-      :power-switch="powerSwitch" :rotate-switch="rotateSwitch"/>
-    <FanTableActions :power-switch="powerSwitch" :rotate-switch="rotateSwitch"
-                     @togglePower="powerSwitch = $event"
-                     @toggleRotate="rotateSwitch = $event"
+      :power-switch="powerSwitch"
+      :rotate-switch="rotateSwitch"/>
+    <FanTableActions
+      :power-switch="powerSwitch" :rotate-switch="rotateSwitch"
+      @togglePower="powerSwitch = $event"
+      @toggleRotate="rotateSwitch = $event"
     />
     <FanTableRotateSpeed
       :fan-speed="fanSpeed"
@@ -28,7 +30,12 @@ import FanTableWindState from "@/components/fan-table/fan-table-wind-state";
 
 export default {
   name: "SectionFanTable",
-  components: {FanTableWindState, FanTableRotateSpeed, FanTableActions, FanTableOscillating}
+  components: {
+    FanTableWindState,
+    FanTableRotateSpeed,
+    FanTableActions,
+    FanTableOscillating
+  }
   ,
   data() {
     return {
@@ -37,9 +44,9 @@ export default {
       fanSpeed: 1
     }
   },
-  computed:{
-    speed(){
-      return 1/this.fanSpeed +'s'
+  computed: {
+    speed() {
+      return 1 / this.fanSpeed + 's'
     }
   },
   methods: {
