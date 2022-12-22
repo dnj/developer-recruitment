@@ -54,7 +54,7 @@ export default defineComponent({
 .fan {
 
   margin-bottom: 12px;
-  background: radial-gradient(circle, rgba(255,255,255,1) 1%, rgba(255,255,255,0) 100%);
+  background: radial-gradient(circle, rgba(255,255,255,1) 15%, rgba(255,255,255,0) 100%);
   border-radius: 50%;
   // box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.5);
 
