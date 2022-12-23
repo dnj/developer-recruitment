@@ -93,16 +93,12 @@ class TravelSpotController extends Controller
 			if ($item->position > $spot->position) {
 				if (is_null($item->arrived_at)) {
 					$travel->spots()->where('position', $item->position)->decrement('position');
-				} else {
-					throw new SpotAlreadyPassedException();
 				}
 			}
 		}
 
-		$travel = $travel->with('spots')->first();
-
 		return response()->json([
-			'travel' => $travel->toArray()
+			'travel' => $travel->with('spots')->first()->toArray()
 		]);
 	}
 }
