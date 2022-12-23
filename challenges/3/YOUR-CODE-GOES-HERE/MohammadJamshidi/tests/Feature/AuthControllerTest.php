@@ -15,6 +15,7 @@ class AuthControllerTest extends TestCase
 
     public function testRegister(): void
     {
+
         $response = $this->postJson('/api/register', array(
             'cellphone' => '09123456789',
             'name' => 'علی',
@@ -36,7 +37,7 @@ class AuthControllerTest extends TestCase
             'password' => '12345'
         ))
             ->assertStatus(422)
-            ->assertJson(fn (AssertableJson $json) => 
+            ->assertJson(fn (AssertableJson $json) =>
                 $json->hasAll(["errors.cellphone", "errors.name","errors.lastname", "errors.password"])->etc()
             );
     }

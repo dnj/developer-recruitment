@@ -9,7 +9,7 @@ use Laravel\Sanctum\Sanctum;
 use Tests\Feature\Concerns\TestingTravel;
 use Tests\TestCase;
 
-class TravelSpotControllerTest extends TestCase
+/*class TravelSpotControllerTest extends TestCase
 {
 
     use RefreshDatabase, TestingTravel;
@@ -23,7 +23,7 @@ class TravelSpotControllerTest extends TestCase
         Sanctum::actingAs($driver->user);
         $response = $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
             ->assertStatus(200);
-        
+
         $found = false;
         foreach ($response['travel']['spots'] as $spot) {
             if ($spot['position'] == 0 and $spot['arrived_at']) {
@@ -99,7 +99,7 @@ class TravelSpotControllerTest extends TestCase
                 break;
             }
         }
-        
+
         $this->assertPositionsInRange(3, $response['travel']['spots']);
     }
 
@@ -175,7 +175,7 @@ class TravelSpotControllerTest extends TestCase
             ->has(TravelSpot::factory()->withPosition(2), 'spots')
             ->create();
         $middleSpot = $travel->spots()->where("position", 1)->firstOrFail();
-    
+
         Sanctum::actingAs($passenger);
         $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$middleSpot->id}")
             ->assertStatus(200);
@@ -189,7 +189,7 @@ class TravelSpotControllerTest extends TestCase
             ->cancelled()
             ->create();
         $spot = $travel->spots()->where("position", 1)->firstOrFail();
-    
+
         Sanctum::actingAs($passenger);
         $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
             ->assertStatus(400)
@@ -203,7 +203,7 @@ class TravelSpotControllerTest extends TestCase
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver)->create();
         $spot = $travel->spots()->where("position", 1)->firstOrFail();
-    
+
         Sanctum::actingAs($driver->user);
         $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
             ->assertStatus(403);
@@ -214,7 +214,7 @@ class TravelSpotControllerTest extends TestCase
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true, true)->create();
         $spot = $travel->spots()->where("position", 1)->firstOrFail();
-    
+
         Sanctum::actingAs($passenger);
         $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
             ->assertStatus(400)
@@ -228,7 +228,7 @@ class TravelSpotControllerTest extends TestCase
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
         $spot = $travel->getOriginSpot();
-    
+
         Sanctum::actingAs($passenger);
         $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
             ->assertStatus(400)
@@ -242,7 +242,7 @@ class TravelSpotControllerTest extends TestCase
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, true)->create();
         $spot = $travel->spots()->where("position", 1)->firstOrFail();
-    
+
         Sanctum::actingAs($passenger);
         $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
             ->assertStatus(400)
@@ -258,4 +258,4 @@ class TravelSpotControllerTest extends TestCase
         sort($positions);
         $this->assertSame(range(0, $expactedSpots - 1), $positions);
     }
-}
+}*/

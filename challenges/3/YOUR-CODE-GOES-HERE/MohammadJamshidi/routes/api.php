@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::post("/register", [AuthController::class, "register"]);
 
 Route::middleware("auth:sanctum")->group(function(Router $router) {
+
     $router->get("/user", [AuthController::class, "user"]);
 
     $router->post("/travels", [TravelController::class, "store"]);

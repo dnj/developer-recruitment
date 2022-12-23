@@ -17,7 +17,7 @@ class DriverControllerTest extends TestCase
 
     use RefreshDatabase, TestingTravel;
 
-    public function testSignup(): void
+  /*  public function testSignup(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -73,5 +73,5 @@ class DriverControllerTest extends TestCase
         foreach ($response['travels'] as $travel) {
             $this->assertTrue($pendingTravels->pluck("id")->contains($travel['id']));
         }
-    }
+    }*/
 }
