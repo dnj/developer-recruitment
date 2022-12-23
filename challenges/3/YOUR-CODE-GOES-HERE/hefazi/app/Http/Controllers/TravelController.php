@@ -17,8 +17,13 @@ use Illuminate\Http\JsonResponse;
 class TravelController extends Controller
 {
 
-	public function view()
+	public function view(Travel $travel): JsonResponse
 	{
+		return response()->json([
+			'travel' => [
+				'id' => $travel->id
+			]
+		]);
 	}
 
 	public function store(TravelStoreRequest $request): JsonResponse
