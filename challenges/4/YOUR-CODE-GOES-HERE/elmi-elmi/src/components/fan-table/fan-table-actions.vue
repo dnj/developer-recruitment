@@ -1,16 +1,18 @@
 <template>
   <v-container>
     <v-row justify="space-around">
+      <!--      power off, on switch-->
       <BaseButtonBox :switch-name="switchNameSys"
                      :title="sysTitle"
                      :modelValue="powerSwitch"
                      @update:modelValue="$emit('togglePower', $event)"
                      icon-name="mdi-power"
       />
+      <!--      rotate head switch-->
       <BaseButtonBox :switch-name="switchNameRotate"
                      :title="rotateTitle"
                      :modelValue="rotateSwitch"
-                     @update:modelValue="$emit('toggleRotate', $event)"
+                     @update:modelValue="$emit('toggleRotation', $event)"
                      icon-name="mdi-code-tags"
       />
     </v-row>
@@ -23,12 +25,6 @@ import BaseButtonBox from "@/components/ui/base/base-button-box";
 export default {
   name: "FanTableActions",
   components: {BaseButtonBox},
-  data() {
-    return {
-      // rotate: false,
-      // power: true
-    }
-  },
   computed: {
     switchNameSys() {
       let status;
@@ -61,9 +57,6 @@ export default {
       default: false
     }
   },
-
-
-
 }
 </script>
 

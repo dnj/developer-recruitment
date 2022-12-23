@@ -1,6 +1,6 @@
 <template>
-<!--  change name to panel-->
-  <v-card  class="mt-4 pa-4 bg-white rounded-lg" width="45%"  flat>
+  <!--  change name to panel-->
+  <v-card class="mt-4 pa-4 bg-white rounded-lg" width="45%" flat>
     <v-row justify="start" align="center">
       <v-btn
         flat
@@ -9,17 +9,18 @@
         color="#30859F"
         :icon="iconName"
       ></v-btn>
-
-      {{ title }}
+      <h3 class="text-subtitle-1 ">
+        {{ title }}
+      </h3>
     </v-row>
     <v-row justify="space-between" align="center">
-      <p class="ma-2">{{ switchName }}</p>
+      <p class="text-subtitle-1 font-weight-bold text-grey-darken-2 ma-2">{{ switchName }}</p>
       <div>
         <v-switch
           :model-value="modelValue"
           @update:modelValue="$emit('update:modelValue', $event)"
           class="ma-2"
-          color="cyan-darken-2"
+          color="#30849E"
           hide-details
         ></v-switch>
       </div>
@@ -41,11 +42,11 @@ export default {
       type: String,
       default: 'غیرفعال'
     },
-    modelValue:{
+    modelValue: {
       type: Boolean,
       default: false
     },
-    iconName:{
+    iconName: {
       type: String,
     }
   },

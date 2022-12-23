@@ -1,13 +1,13 @@
 <template>
-  <v-container>
-<!--    title-->
-    <h2 class="text-h6">
+  <v-container class="pt-0">
+    <!--    title-->
+    <h2 class="text-subtitle-1 font-weight-medium ">
       {{
         $vuetify.locale.t('$vuetify.wind_status.title')
       }}
     </h2>
-<!--    modes: [simple oceanic tropical silvan]-->
-    <div class="d-flex flex-row">
+    <!--    modes: [simple oceanic tropical silvan]-->
+    <div class="d-flex flex-row mt-2">
       <v-card
         v-for="state in states"
         class="d-flex rounded-lg flex-column align-center py-2 px-4 fan-table-states  "
@@ -15,31 +15,22 @@
         flat
         @click="$emit('windMode',state.mode)"
       >
-        <v-icon>
+        <v-icon size="small">
           {{ state.icon }}
         </v-icon>
-        <p class="text-body-1">
+        <p class="text-subtitle-2 mt-2">
           {{ state.text }}
         </p>
       </v-card>
     </div>
-
   </v-container>
 </template>
 
 <script>
-import BaseList from "@/components/ui/base/base-list";
-
 export default {
   name: "FanTableWindState",
-  components: {BaseList},
-  data() {
-    return {
-      toggle_exclusive: 0,
-    }
-  },
-  props:{
-    states:{
+  props: {
+    states: {
       type: Array,
       default: []
     }

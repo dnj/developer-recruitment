@@ -1,15 +1,13 @@
 <template>
   <v-app>
-    <v-main class="mx-auto" >
+    <v-main class="mx-auto">
       <v-responsive max-width="320" max-height="745">
         <SectionFanTable/>
       </v-responsive>
-<!--      <HelloWorld />-->
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-  import HelloWorld from '@/components/HelloWorld.vue'
-  import SectionFanTable from '@/components/fan-table/fan-table.vue'
+import SectionFanTable from '@/components/fan-table/fan-table.vue'
 </script>
