@@ -1,0 +1,68 @@
+@import './base.css';
+
+@font-face {
+  font-family: "Black";
+  src: url("@/assets/fonts/Vazir-Black.woff");
+}
+
+@font-face {
+  font-family: "Bold";
+  src: url("@/assets/fonts/Vazir-Bold.woff");
+}
+
+@font-face {
+  font-family: "Light";
+  src: url("@/assets/fonts/Vazir-Light.woff");
+}
+
+@font-face {
+  font-family: "Medium";
+  src: url("@/assets/fonts/Vazir-Medium.woff");
+}
+
+@font-face {
+  font-family: "Regular";
+  src: url("@/assets/fonts/Vazir-Regular.woff");
+}
+
+@font-face {
+  font-family: "Thin";
+  src: url("@/assets/fonts/Vazir-Thin.woff");
+}
+
+@font-face {
+  font-family: "Variable";
+  src: url("@/assets/fonts/Vazir-Variable.woff");
+}
+
+.black-font {
+  font-family: 'Black';
+}
+
+.bold-font {
+  font-family: 'Bold';
+}
+
+.light-font {
+  font-family: 'Light';
+}
+
+.medium-font {
+  font-family: 'Medium';
+}
+
+.regular-font {
+  font-family: 'Regular';
+}
+
+.thin-font {
+  font-family: 'Thin';
+}
+
+.variable-font {
+  font-family: 'Variable';
+}
+
+body {
+  background-color: #f6f6f6;
+}
