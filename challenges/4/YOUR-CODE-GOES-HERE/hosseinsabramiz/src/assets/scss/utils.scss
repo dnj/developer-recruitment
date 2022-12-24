@@ -1,0 +1,32 @@
+
+// Color
+$primaryColor : #30859f ;
+
+// Filter
+$primaryColorFilter : brightness(0) saturate(100%) invert(40%) sepia(11%) saturate(2185%) hue-rotate(148deg) brightness(112%) contrast(98%);
+
+// mixin
+@mixin flexCenterYWithJustify($string) {
+    display: flex;
+    align-items: center;
+    justify-content: $string;
+}
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+      @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+      @content;
+    }  
+    @-ms-keyframes #{$animation-name} {
+      @content;
+    }
+    @-o-keyframes #{$animation-name} {
+      @content;
+    }  
+    @keyframes #{$animation-name} {
+      @content;
+    }
+}
+
