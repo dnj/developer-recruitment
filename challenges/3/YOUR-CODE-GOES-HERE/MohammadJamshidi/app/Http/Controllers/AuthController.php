@@ -23,7 +23,7 @@ class AuthController extends Controller {
         //Create token for registered user
         if($result){
 
-          $user->createToken('api_token');
+         $token= $user->createToken('api_token');
 
         }
 

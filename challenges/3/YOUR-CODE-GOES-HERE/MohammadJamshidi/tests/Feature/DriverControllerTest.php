@@ -17,7 +17,7 @@ class DriverControllerTest extends TestCase
 
     use RefreshDatabase, TestingTravel;
 
-  /*  public function testSignup(): void
+    public function testSignup(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -64,14 +64,14 @@ class DriverControllerTest extends TestCase
             ->assertJson(array(
                 'driver' => $driverData
             ))
-            ->assertJson(function (AssertableJson $json) {
+           ->assertJson(function (AssertableJson $json) {
                 $json->has("travels", 2);
                 $json->hasAll(["travels.0.id", "travels.0.spots", "travels.1.id", "travels.1.spots"]);
                 $json->etc();
             });
 
-        foreach ($response['travels'] as $travel) {
+          foreach ($response['travels'] as $travel) {
             $this->assertTrue($pendingTravels->pluck("id")->contains($travel['id']));
-        }
-    }*/
+         }
+    }
 }

@@ -55,4 +55,6 @@ class AuthControllerTest extends TestCase
                 $json->missing('user.password');
             });
     }
+
+
 }
