@@ -76,7 +76,7 @@ class TravelSpotControllerTest extends TestCase
                 'code' => 'SpotAlreadyPassed'
             ));
     }
-/*
+
     public function testStore(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
@@ -168,6 +168,8 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
+
+
     public function testDestroy(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
@@ -258,5 +260,5 @@ class TravelSpotControllerTest extends TestCase
         sort($positions);
         $this->assertSame(range(0, $expactedSpots - 1), $positions);
     }
-*/
+
 }
