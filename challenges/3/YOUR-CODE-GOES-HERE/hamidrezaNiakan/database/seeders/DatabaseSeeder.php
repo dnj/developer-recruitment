@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Driver;
+use App\Models\Travel;
+use App\Models\TravelSpot;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,11 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+		\App\Models\User::factory(10)->create();
+		Driver::factory(10)->create();
+		Travel::factory(3)->create();
+		Travel::factory(2)->searchingForDriver()->create();
+		TravelSpot::factory(3)->create();
     }
 }
