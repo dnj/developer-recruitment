@@ -22,6 +22,12 @@ class Travel extends Model
     }
 
     protected $table = "travels";
+	
+	protected $fillable = [
+		'passenger_id',
+		'status',
+		'driver_id'
+	];
     protected $casts = array(
         'status' => TravelStatus::class,
     );
