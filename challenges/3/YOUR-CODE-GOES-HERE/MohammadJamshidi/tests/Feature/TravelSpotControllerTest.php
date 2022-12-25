@@ -9,7 +9,7 @@ use Laravel\Sanctum\Sanctum;
 use Tests\Feature\Concerns\TestingTravel;
 use Tests\TestCase;
 
-/*class TravelSpotControllerTest extends TestCase
+class TravelSpotControllerTest extends TestCase
 {
 
     use RefreshDatabase, TestingTravel;
@@ -76,7 +76,7 @@ use Tests\TestCase;
                 'code' => 'SpotAlreadyPassed'
             ));
     }
-
+/*
     public function testStore(): void
     {
         [$passenger, $driver] = $this->createPassengerDriver();
@@ -258,4 +258,5 @@ use Tests\TestCase;
         sort($positions);
         $this->assertSame(range(0, $expactedSpots - 1), $positions);
     }
-}*/
+*/
+}

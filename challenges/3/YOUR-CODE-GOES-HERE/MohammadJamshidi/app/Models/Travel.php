@@ -11,6 +11,8 @@ class Travel extends Model
 {
     use HasFactory;
 
+    protected $guarded=[];
+
     public static function userHasActiveTravel(User $user): bool {
         return self::query()
             ->whereIn("status", [TravelStatus::RUNNING, TravelStatus::SEARCHING_FOR_DRIVER])
@@ -36,7 +38,7 @@ class Travel extends Model
         return $this->belongsTo(Driver::class);
     }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(TravelEvent::class);
     }
