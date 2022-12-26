@@ -28,11 +28,9 @@ class TravelSpotController extends Controller {
 			if ( $travel->status->value == TravelStatus::CANCELLED->value ) {
 				throw new InvalidTravelStatusForThisActionException();
 			}
-			$spot = $travel->getOriginSpot();
-			$spot->arrived_at = Carbon::now();
-			$spot->save();
-			$travel->status = TravelStatus::RUNNING;
-			$travel->save();
+			$origin_Spot = $travel->getOriginSpot();
+			$origin_Spot->arrived_at = Carbon::now();
+			$origin_Spot->save();
 			
 			return response()->json(TravelResource::make($travel));
 		}
@@ -63,57 +61,69 @@ class TravelSpotController extends Controller {
 			abort(403);
 		}
 		if ( $user->can('create' , $travel) ) {
-			if ($travel->allSpotsPassed()) {
+			if ( $travel->allSpotsPassed() ) {
 				throw new SpotAlreadyPassedException();
 			}
-			if ($travel->status->value == TravelStatus::CANCELLED->value) {
+			if ( $travel->status->value == TravelStatus::CANCELLED->value ) {
 				throw new InvalidTravelStatusForThisActionException();
 			}
-			$travel_spot = TravelSpot::query()
-									 ->create([
-												  'travel_id' => $travel->id ,
-												  'latitude' => $request->get('latitude') ,
-												  'longitude' => $request->get('longitude') ,
-												  'position' => $request->get('position') ,
-											  ]);
+			foreach ( $travel->spots as $spot ) {
+				
+				if ( $spot->position >= $request->position ) {
+					
+					$travel->spots()
+						   ->where('position' , $request->position)
+						   ->increment('position');
+					break;
+				}
+			}
+			$travel->spots()
+				   ->create($request->toArray());
+			$travel = Travel::query()
+							->where('id' , $travel->id)
+							->with('spots')
+							->first();
 			
 			return response()->json([
 										'travel' => [
-											'spots' => [
-												[
-													'latitude' => $travel_spot->latitude ,
-													'longitude' => $travel_spot->longitude ,
-													'position' => $travel_spot->position ,
-												] ,
-											] ,
+											'spots' => $travel->spots ,
 										] ,
 									]);
 		}
 	}
 	
-	public function destroy ( Travel $travel , TravelSpot $spot , Request $request) {
+	public function destroy ( Travel $travel , $spot , Request $request ) {
+		
+		$spot_deleted = TravelSpot::query()
+								  ->findOrFail($spot);
 		$user = $request->user();
 		if ( Driver::isDriver($user) ) {
 			abort(403);
 		}
-		if ($user->can('destroy',$spot)) {
-			if ($travel->allSpotsPassed()) {
-				throw new SpotAlreadyPassedException();
-			}
-			$middleSpot = $travel->spots()->where("position", 1)->firstOrFail();
-			if ($travel->status->value ===  TravelStatus::RUNNING->value && $middleSpot) {
-				$middleSpot->delete();
-				return response()->json(TravelResource::make($travel));
-			}
-			if ($travel->status->value ===  TravelStatus::RUNNING->value && $travel->getOriginSpot()) {
-				throw new ProtectedSpotException();
-			}
-			if ($travel->status->value === TravelStatus::CANCELLED->value) {
+		if ( $user->can('destroy' , $spot_deleted) ) {
+			if ( !( $travel->status->value === TravelStatus::RUNNING->value ) ) {
 				throw new InvalidTravelStatusForThisActionException();
 			}
+			if ( $travel->allSpotsPassed() ) {
+				throw  new SpotAlreadyPassedException();
+			}
+			$origin_Spot = $travel->getOriginSpot();
+			if ( $origin_Spot->id == $spot ) {
+				throw  new ProtectedSpotException();
+			}
+			$spot_deleted = TravelSpot::query()
+									  ->findOrFail($spot);
+			if ( ( count($travel->spots) - 1 ) == $spot_deleted->position ) {
+				
+				throw  new ProtectedSpotException();
+			}
+			TravelSpot::query()
+					  ->where('position' , $spot)
+					  ->delete();
+			
+			return response()->json([
+										'travel' => $travel->load('spots') ,
+									]);
 		}
-	
-		
-		
 	}
 }
