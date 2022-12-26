@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-		//\App\Models\User::factory(10)->create();
-		//Driver::factory(10)->create();
-		//Travel::factory(3)->create();
-		//Travel::factory(2)->searchingForDriver()->create();
-		//TravelSpot::factory(3)->create();
+		\App\Models\User::factory(10)->create();
+		Driver::factory(10)->create();
+		Travel::factory(3)->create();
+		Travel::factory(2)->searchingForDriver()->create();
+		TravelSpot::factory(9)->create();
 		TravelEvent::factory(9)->create();
     }
 }
