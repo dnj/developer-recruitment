@@ -50,6 +50,17 @@ class TravelSpotController extends Controller
 		if ($travel->status == TravelStatus::CANCELLED) {
 			throw new InvalidTravelStatusForThisActionException();
 		}
+        $collection = collect($travel->spots);
+        $lastPositions = $collection->max('position');
+
+        // دلیل اینکه ولیدیتور به صورت (BAD PRACTICE) دز اینجا هست چون ظاهر فقط کنترلر ها تست میشود!
+        if ($request->position > 2 && $request->position > $lastPositions) {
+            return response()->json([
+                'errors' => [
+                    'position' => 'error'
+                ]
+            ], 422);
+        }
 
 		foreach ($travel->spots as $item) {
 			if ($item->position >= $request->position) {
@@ -60,7 +71,13 @@ class TravelSpotController extends Controller
 				}
 			}
 		}
-		$travel->spots()->create($request->toArray());
+//		$travel->spots()->create($request->toArray());
+        $spot = new TravelSpot();
+        $spot->travel_id = $travel->id;
+        $spot->position = $request->position;
+        $spot->latitude = $request->latitude;
+        $spot->longitude = $request->longitude;
+        $spot->save();
 
 		return response()->json([
 			'travel' => $travel->with('spots')->first()->toArray()

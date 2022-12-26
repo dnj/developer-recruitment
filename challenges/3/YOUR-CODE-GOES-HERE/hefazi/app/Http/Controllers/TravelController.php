@@ -12,6 +12,8 @@ use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Models\Travel;
+use App\Models\TravelEvent;
+use App\Models\TravelSpot;
 use Illuminate\Http\JsonResponse;
 
 class TravelController extends Controller
@@ -32,20 +34,33 @@ class TravelController extends Controller
 			throw new ActiveTravelException();
 		}
 
-		$travel = Travel::create([
-			'passenger_id' => auth()->id(),
-			'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
-		]);
+//		$travel = Travel::create([
+//			'passenger_id' => auth()->id(),
+//			'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
+//		]);
 
-		$apots = collect($request->spots)->map(function ($item) {
-			return [
-				'position' => $item['position'],
-				'latitude' => $item['latitude'],
-				'longitude' => $item['longitude'],
-			];
-		});
+//		$spots = collect($request->spots)->map(function ($item) {
+//			return [
+//				'position' => $item['position'],
+//				'latitude' => $item['latitude'],
+//				'longitude' => $item['longitude'],
+//			];
+//		});
+//
+//		$travel->spots()->createMany($spots->all());
 
-		$travel->spots()->createMany($apots->all());
+        $travel = new Travel();
+        $travel->passenger_id = auth()->id();
+        $travel->status = TravelStatus::SEARCHING_FOR_DRIVER->value;
+        $travel->save();
+        foreach ($request->spots as $spot) {
+            $newSpot = new TravelSpot();
+            $newSpot->travel_id = $travel->id;
+            $newSpot->position = $spot['position'];
+            $newSpot->latitude = $spot['latitude'];
+            $newSpot->longitude = $spot['longitude'];
+            $newSpot->save();
+        }
 
 		return response()->json([
 			'travel' => [
@@ -74,9 +89,11 @@ class TravelController extends Controller
 			throw new CannotCancelRunningTravelException();
 		}
 
-		$travel->update([
-			'status' => TravelStatus::CANCELLED->value
-		]);
+//		$travel->update([
+//			'status' => TravelStatus::CANCELLED->value
+//		]);
+        $travel->status = TravelStatus::CANCELLED->value;
+        $travel->save();
 
 		return response()->json([
 			'travel' => $travel
@@ -105,9 +122,13 @@ class TravelController extends Controller
 			throw new InvalidTravelStatusForThisActionException();
 		}
 
-		$travel->events()->create([
-			'type' => TravelEventType::PASSENGER_ONBOARD->value
-		]);
+//		$travel->events()->create([
+//			'type' => TravelEventType::PASSENGER_ONBOARD->value
+//		]);
+        $event = new TravelEvent();
+        $event->travel_id = $travel->id;
+        $event->type = TravelEventType::PASSENGER_ONBOARD->value;
+        $event->save();
 
 		return response()->json([
 			'travel' => $travel->with('events')->first()->toArray()
@@ -116,7 +137,7 @@ class TravelController extends Controller
 
 	public function done(Travel $travel): JsonResponse
 	{
-		$travel = $travel->with('events')->first();
+//		$travel = $travel->with('events')->first();
 
 		if ($travel->passenger_id == auth()->id()) {
 			abort(403);
@@ -130,14 +151,16 @@ class TravelController extends Controller
 			$travel->status = TravelStatus::DONE->value;
 			$travel->save();
 
-			$travel->events()->create([
-				'type' => TravelEventType::DONE->value
-			]);
-
-			$travel = $travel->with('events')->first();
+//			$travel->events()->create([
+//				'type' => TravelEventType::DONE->value
+//			]);
+            $event = new TravelEvent();
+            $event->travel_id = $travel->id;
+            $event->type = TravelEventType::DONE->value;
+            $event->save();
 
 			return response()->json([
-				'travel' => $travel->toArray()
+                'travel' => $travel->with('events')->first()->toArray()
 			]);
 		}
 		throw new AllSpotsDidNotPassException();
@@ -153,13 +176,19 @@ class TravelController extends Controller
 			throw new InvalidTravelStatusForThisActionException();
 		}
 
-		$travel->update([
-			'driver_id' => auth()->id()
-		]);
+//		$travel->update([
+//			'driver_id' => auth()->id()
+//		]);
+        $travel->driver_id = auth()->id();
+        $travel->save();
 
-		$travel->events()->create([
-			'type' => TravelEventType::ACCEPT_BY_DRIVER->value
-		]);
+//		$travel->events()->create([
+//			'type' => TravelEventType::ACCEPT_BY_DRIVER->value
+//		]);
+        $event = new TravelEvent();
+        $event->travel_id = $travel->id;
+        $event->type = TravelEventType::ACCEPT_BY_DRIVER->value;
+        $event->save();
 
 		return response()->json([
 			'travel' => collect($travel->toArray())->filter(function () {
