@@ -13,6 +13,7 @@ class TravelSpot extends Model {
 		'position' ,
 		'latitude' ,
 		'longitude' ,
+		'travel_id'
 	];
 	
 	public function travel () {
