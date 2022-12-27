@@ -13,13 +13,13 @@ export default function Fan({ isOn, isOscillating, speedStatus, conditionStatus 
 
 
   return (
-    <div className='fan'>
+    <div className={'fan' + (isOn ? ' isOn' : '')}>
         
       {/* fan */}
       <div id='fanContainer'>
 
         {/* body */}
-        <div id='fan-body'>
+        <div id='fan-body' className={'speed_' + speedStatus + ' condition_' + conditionStatus}>
           <div id='grid-layer-1'>
             <div id='grid-layer-2'>
               <div id='grid-layer-3'>
