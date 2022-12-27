@@ -17,16 +17,15 @@ type SelectorProps = {
 
 export default function ConditionSelector({ condition, onChange}: SelectorProps){
 
-
-
+  //render:
   return (
     <div className='conditionSelector'>
       <a id='title'>حالت باد</a>
       <div id='selectButtonsContainer'>
           
           <SelectButton
-            isSelected={condition === 'SIMPLE'}
-            onSelect={()=>{onChange('SIMPLE')}}
+            isSelected={condition === 'NORMAL'}
+            onSelect={()=>{onChange('NORMAL')}}
             title={'ساده'}
             selectedIcon={windIcon_fff}
             notSelectedIcon={windIcon_333}/>
