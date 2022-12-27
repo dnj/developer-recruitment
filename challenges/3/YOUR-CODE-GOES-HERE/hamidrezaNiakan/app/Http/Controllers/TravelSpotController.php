@@ -6,6 +6,7 @@ use App\Enums\TravelStatus;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Exceptions\ProtectedSpotException;
 use App\Exceptions\SpotAlreadyPassedException;
+use App\Http\Requests\TravelSpotStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Models\Driver;
 use App\Models\Travel;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 class TravelSpotController extends Controller {
 	public function arrived ( Travel $travel , TravelSpot $spot , Request $request ) {
-		DB::beginTransaction();
 		$user = $request->user();
 		if ( !Driver::isDriver($user) ) {
 			abort(403);
@@ -34,28 +34,9 @@ class TravelSpotController extends Controller {
 			
 			return response()->json(TravelResource::make($travel));
 		}
-		DB::commit();
 	}
 	
-	public function store ( Travel $travel , Request $request ) {
-		$this->validate($request , [
-			'position' => [
-				'required' ,
-				'integer' ,
-				'min:0' ,
-				'between:0,1' ,
-			] ,
-			'latitude' => [
-				'required' ,
-				'min:-90' ,
-				'max:90' ,
-			] ,
-			'longitude' => [
-				'required' ,
-				'min:-180' ,
-				'max:180' ,
-			] ,
-		]);
+	public function store ( Travel $travel , TravelSpotStoreRequest $request ) {
 		$user = $request->user();
 		if ( Driver::isDriver($user) ) {
 			abort(403);

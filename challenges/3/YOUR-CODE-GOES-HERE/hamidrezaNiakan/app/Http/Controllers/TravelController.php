@@ -20,33 +20,42 @@ use Illuminate\Support\Facades\DB;
 
 class TravelController extends Controller {
 	public function view ( Travel $travel , Request $request ) {
+		
+		if ( !auth('sanctum')->check() ) {
+			abort(401);
+		}
 		$user = $request->user();
 		if ( $user->can('view' , $travel) ) {
-			return [
-				'travel' => [
-					'id' => $travel->id ,
-				] ,
-			];
+			if ( $travel->status->value == TravelStatus::RUNNING->value ) {
+				return response()->json(TravelResource::make($travel));
+			}
 		}
 	}
 	
 	public function store ( TravelStoreRequest $request ) {
+		
+		if ( !auth('sanctum')->check() ) {
+			abort(401);
+		}
 		$user = $request->user();
-		$spots = $request->get('spots' , []);
 		if ( Travel::userHasActiveTravel($user) ) {
 			throw new ActiveTravelException();
 		}
-		DB::beginTransaction();
-		$travel = Travel::query()
-						->create([
-									 'passenger_id' => $user->id ,
-									 'status' => TravelStatus::SEARCHING_FOR_DRIVER->value ,
-								 ]);
-		$travel->spots()
-			   ->createMany($spots);
-		DB::commit();
-		
-		return response()->json(TravelResource::make($travel) , 201);
+		$spots = $request->get('spots' , []);
+		$travel = new Travel();
+		if ( $user->can('create' , $travel) ) {
+			DB::beginTransaction();
+			$travel = Travel::query()
+							->create([
+										 'passenger_id' => $user->id ,
+										 'status' => TravelStatus::SEARCHING_FOR_DRIVER->value ,
+									 ]);
+			$travel->spots()
+				   ->createMany($spots);
+			DB::commit();
+			
+			return response()->json(TravelResource::make($travel) , 201);
+		}
 	}
 	
 	public function cancel ( Travel $travel , Request $request ) {
@@ -136,10 +145,10 @@ class TravelController extends Controller {
 		$user = $request->user();
 		if ( $user->can('take' , $travel) ) {
 			$driver = Driver::byUser($user);
-			if ( Travel::userHasActiveTravel($user)) {
+			if ( Travel::userHasActiveTravel($user) ) {
 				throw new ActiveTravelException();
 			}
-			if ($travel->status->value != TravelStatus::SEARCHING_FOR_DRIVER->value) {
+			if ( $travel->status->value != TravelStatus::SEARCHING_FOR_DRIVER->value ) {
 				throw new InvalidTravelStatusForThisActionException();
 			}
 			$travel->driver_id = $driver->id;

@@ -194,6 +194,16 @@ class TravelControllerTest extends TestCase
                 ));
         }
     }
+	public function testUserUnathorized () {
+		[
+			$passenger ,
+			$driver,
+		] = $this->createPassengerDriver();
+		$travel = $this->runningTravel($passenger , $driver)
+					   ->create();
+		$this->getJson("/api/travels/{$travel->id}")
+			 ->assertStatus(401);
+	}
 
     public function testPassengerOnBoard()
     {
