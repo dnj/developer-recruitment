@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import PowerButton from './components/powerButton/powerButton'
 import SpeedController from './components/speedController/speedController'
+import ConditionSelector from './components/conditionSelector/conditionSelector'
 import powerIcon from './assets/power.svg'
 import arrowIcon from './assets/arrows-left-right.svg'
 import './stylesheets/App.scss'
 
-enum PowerStatus { 
+enum PowerStatus {
   ON = 'روشن',
   OFF= 'خاموش'
 }
 
-enum OscillateStatus { 
+enum OscillateStatus {
   ON = 'فعال',
   OFF= 'غیر فعال'
 }
@@ -23,11 +24,19 @@ enum SpeedStatus {
   TORNADO
 }
 
+enum ConditionStatus {
+  SIMPLE   = 'SIMPLE',
+  OCEANIC  = 'OCEANIC',
+  TROPICAL = 'TROPICAL',
+  WOODSY   = 'WOODSY'
+}
+
 function App(){
 
-  const [powerStatus, setPowerStatus] = useState(PowerStatus.OFF);
-  const [oscillateStatus, setOscillateStatus] = useState(OscillateStatus.OFF);
-  const [speedStatus, setSpeedStatus] = useState(SpeedStatus.MIDDLE);
+  const [powerStatus    , setPowerStatus    ] = useState(PowerStatus.OFF       );
+  const [oscillateStatus, setOscillateStatus] = useState(OscillateStatus.OFF   );
+  const [speedStatus    , setSpeedStatus    ] = useState(SpeedStatus.MIDDLE    );
+  const [conditionStatus, setConditionStatus] = useState(ConditionStatus.SIMPLE);
   
 
 
@@ -71,7 +80,9 @@ function App(){
 
         {/* condition */}
         <div className='section' id='conditionWrapper'>
-
+          <ConditionSelector
+            condition={conditionStatus}
+            onChange={(condition)=>{setConditionStatus(condition as ConditionStatus)}}/>
         </div>
 
       </div>
