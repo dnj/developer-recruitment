@@ -5,6 +5,7 @@ import ConditionSelector from './components/conditionSelector/conditionSelector'
 import powerIcon from './assets/power.svg'
 import arrowIcon from './assets/arrows-left-right.svg'
 import './stylesheets/App.scss'
+import Fan from './components/fan/fan'
 
 enum PowerStatus {
   ON = 'روشن',
@@ -25,7 +26,7 @@ enum SpeedStatus {
 }
 
 enum ConditionStatus {
-  SIMPLE   = 'SIMPLE',
+  NORMAL   = 'NORMAL',
   OCEANIC  = 'OCEANIC',
   TROPICAL = 'TROPICAL',
   WOODSY   = 'WOODSY'
@@ -33,21 +34,24 @@ enum ConditionStatus {
 
 function App(){
 
+  //states:
   const [powerStatus    , setPowerStatus    ] = useState(PowerStatus.OFF       );
   const [oscillateStatus, setOscillateStatus] = useState(OscillateStatus.OFF   );
   const [speedStatus    , setSpeedStatus    ] = useState(SpeedStatus.MIDDLE    );
-  const [conditionStatus, setConditionStatus] = useState(ConditionStatus.SIMPLE);
+  const [conditionStatus, setConditionStatus] = useState(ConditionStatus.NORMAL);
   
-
-
-
+  //render:
   return (
     <div className="App" dir='rtl'>
       <div className='window'>
 
         {/* fan */}
         <div className='section' id='fanSection'>
-          
+          <Fan
+            isOn={powerStatus === PowerStatus.ON}
+            isOscillating={oscillateStatus === OscillateStatus.ON}
+            speedStatus={speedStatus}
+            conditionStatus={conditionStatus}/>
         </div>
 
         {/* status */}
