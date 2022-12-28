@@ -1,0 +1,27 @@
+.selectButton{
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    > #iconImage{
+        width: 25px;
+        height: 25px;
+    }
+    > #title{
+        font-size: 1.4rem;
+        color: #333;
+    }
+}
+
+.selectButton.isSelected{
+    background-color: #3c859f;
+    > #title{
+        color: #fff;
+    }
+}

@@ -1,0 +1,14 @@
+.conditionSelector{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    > #title{
+        color: #333;
+        font-size: 1.5rem;
+    }
+    > #selectButtonsContainer{
+        display: flex;
+        gap: 10px;
+    }
+}
