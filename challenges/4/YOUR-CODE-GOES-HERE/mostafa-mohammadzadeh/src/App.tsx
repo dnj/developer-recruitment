@@ -64,11 +64,22 @@ enum ConditionStatus {
 
 function App(){
 
+  //dir
+  document.dir = 'rtl';
+
   //states:
-  const [powerStatus    , setPowerStatus    ] = useState(PowerStatus.OFF       );
-  const [oscillateStatus, setOscillateStatus] = useState(OscillateStatus.OFF   );
-  const [speedStatus    , setSpeedStatus    ] = useState(SpeedStatus.MIDDLE    );
-  const [conditionStatus, setConditionStatus] = useState(ConditionStatus.NORMAL);
+  const cookies = new Cookies();
+  const cookiesMaxAge = 1000*24*60*60;
+  const [powerStatus    , setPowerStatus    ] = useState(cookies.get('PowerStatus'    ) || PowerStatus.OFF       );
+  const [oscillateStatus, setOscillateStatus] = useState(cookies.get('OscillateStatus') || OscillateStatus.OFF   );
+  const [speedStatus    , setSpeedStatus    ] = useState(cookies.get('SpeedStatus'    ) || SpeedStatus.MIDDLE    );
+  const [conditionStatus, setConditionStatus] = useState(cookies.get('ConditionStatus') || ConditionStatus.NORMAL);
+
+  //effects:
+  useEffect(() => { cookies.set('PowerStatus'    , powerStatus     , { path: '/', maxAge: cookiesMaxAge }); }, [powerStatus    ]);
+  useEffect(() => { cookies.set('OscillateStatus', oscillateStatus , { path: '/', maxAge: cookiesMaxAge }); }, [oscillateStatus]);
+  useEffect(() => { cookies.set('SpeedStatus'    , speedStatus     , { path: '/', maxAge: cookiesMaxAge }); }, [speedStatus    ]);
+  useEffect(() => { cookies.set('ConditionStatus', conditionStatus , { path: '/', maxAge: cookiesMaxAge }); }, [conditionStatus]);
   
   //render:
   return (
@@ -84,20 +95,23 @@ function App(){
             conditionStatus={conditionStatus}/>
         </div>
 
-        {/* status */}
         <div id='statusSection'>
 
+          {/* power */}
           <div id='powerWrapper'>
             <PowerButton
               title="دستگاه"
+              isChecked={powerStatus === PowerStatus.ON}
               icon={powerIcon}
               label={powerStatus}
               onChange={(isChecked)=>{setPowerStatus(isChecked ? PowerStatus.ON : PowerStatus.OFF)}}/>
           </div>
 
+          {/* oscillate */}
           <div id='powerWrapper'>
             <PowerButton
               title="چرخش"
+              isChecked={oscillateStatus === OscillateStatus.ON}
               icon={arrowIcon}
               label={oscillateStatus}
               onChange={(isChecked)=>{setOscillateStatus(isChecked ? OscillateStatus.ON : OscillateStatus.OFF)}}/>
