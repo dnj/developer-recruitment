@@ -46,7 +46,7 @@ function App(){
       <div className='window'>
 
         {/* fan */}
-        <div className='section' id='fanSection'>
+        <div id='fanSection'>
           <Fan
             isOn={powerStatus === PowerStatus.ON}
             isOscillating={oscillateStatus === OscillateStatus.ON}
@@ -55,7 +55,7 @@ function App(){
         </div>
 
         {/* status */}
-        <div className='section' id='statusSection'>
+        <div id='statusSection'>
 
           <div id='powerWrapper'>
             <PowerButton
@@ -76,14 +76,14 @@ function App(){
         </div>
 
         {/* speed */}
-        <div className='section' id='speedSection'>
+        <div id='speedSection'>
           <SpeedController
             status={speedStatus}
             onChange={(speed)=>{setSpeedStatus(speed)}}/>
         </div>
 
         {/* condition */}
-        <div className='section' id='conditionWrapper'>
+        <div id='conditionWrapper'>
           <ConditionSelector
             condition={conditionStatus}
             onChange={(condition)=>{setConditionStatus(condition as ConditionStatus)}}/>
