@@ -80,7 +80,7 @@
 }
 
 // rotating key frame:
-@-webkit-keyframes rotating { // Safari and Chrome
+@-webkit-keyframes rotating {
     from {
         -webkit-transform: rotate(0deg);
         -o-transform: rotate(0deg);
@@ -110,7 +110,7 @@
 }
 
 // oscillate key frame:
-@-webkit-keyframes oscillate { // Safari and Chrome
+@-webkit-keyframes oscillate {
     from {
         -webkit-transform: rotateY(-60deg);
         -o-transform: rotateY(-60deg);

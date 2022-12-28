@@ -10,8 +10,7 @@ type FanProps = {
 
 export default function Fan({ isOn, isOscillating, speedStatus, conditionStatus }: FanProps){
 
-
-
+  //render:
   return (
     <div className={'fan' + (isOn ? ' isOn' : '')}>
         

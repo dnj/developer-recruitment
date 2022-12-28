@@ -1,5 +1,4 @@
 import React from 'react'
-import Switch from '@mui/material/Switch'
 import './selectButton.scss'
 
 type ButtonProps = {
@@ -12,8 +11,7 @@ type ButtonProps = {
 
 export default function SelectButton({ title, selectedIcon, notSelectedIcon, isSelected, onSelect }: ButtonProps){
 
-
-
+  //render:
   return (
     <button
       className={'selectButton' + (isSelected ? ' isSelected' : '')}
