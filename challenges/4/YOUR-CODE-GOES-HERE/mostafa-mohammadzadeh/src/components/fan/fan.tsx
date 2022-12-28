@@ -16,14 +16,16 @@ export default function Fan({ isOn, isOscillating, speedStatus, conditionStatus 
     <div className={'fan' + (isOn ? ' isOn' : '')}>
         
       {/* fan */}
-      <div id='fanContainer'>
+      <div id='fanWrapper'>
 
         {/* body */}
-        <div id='fan-body' className={'speed_' + speedStatus + ' condition_' + conditionStatus}>
-          <div id='grid-layer-1'>
-            <div id='grid-layer-2'>
-              <div id='grid-layer-3'>
-                <div id='fan-cap'/>
+        <div id='fanContainer' className={(isOscillating ? 'oscillating ' : '') + 'speed_' + speedStatus}>
+          <div id='fan-body' className={' condition_' + conditionStatus}>
+            <div id='grid-layer-1'>
+              <div id='grid-layer-2'>
+                <div id='grid-layer-3'>
+                  <div id='fan-cap'/>
+                </div>
               </div>
             </div>
           </div>
