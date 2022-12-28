@@ -1,0 +1,179 @@
+.fan{
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    > #fanWrapper{
+        width: 100%;
+        flex: 1;
+        background-color: #3c859f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        > #fanContainer{
+            z-index: 3;
+            div{
+                border-radius: 50%;
+                border: solid 1px #e2f0f3;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            > #fan-body{
+                width: 220px;
+                height: 220px;
+                border-width: 3px;
+                background: #88bac9 url(../../assets/blades.svg) no-repeat center / calc(100% - 35px) auto;
+                margin-top: 70px;
+                box-shadow: 0 0 40px #3c859f;
+                > #grid-layer-1{
+                    width: calc(100% - 25px);
+                    height: calc(100% - 25px);
+                    > #grid-layer-2{
+                        width: calc(100% - 40px);
+                        height: calc(100% - 40px);
+                        > #grid-layer-3{
+                            width: calc(100% - 40px);
+                            height: calc(100% - 40px);
+                            > #fan-cap{
+                                width: calc(100% - 53px);
+                                height: calc(100% - 53px);
+                                background-color: #eceef2;
+                                box-shadow: 0 0 30px #55a0b7;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    > #wave_3c859f{
+        width: 100%;
+        height: 100px;
+        background: transparent url(../../assets/wave_3c859f.svg) no-repeat center / 100% auto;
+        margin-bottom: -55px;
+        z-index: 2;
+        position: relative;
+        > #stand{
+            width: 15px;
+            height: 200px;
+            background-color: #f6f6f6;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+    }
+    > #wave_7bdcb5{
+        width: 100%;
+        height: 70px;
+        background: transparent url(../../assets/wave_7bdcb5.svg) no-repeat center / 100% auto;
+        margin-bottom: -73px;
+        z-index: 1;
+    }
+    > #wave_f6f6f6{
+        width: 100%;
+        height: 70px;
+        background: #bfd7ff url(../../assets/wave_f6f6f6.svg) no-repeat center / 100% auto;
+    }
+}
+
+// rotating key frame:
+@-webkit-keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotating {
+    from {
+      -ms-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -ms-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+}
+
+// oscillate key frame:
+@-webkit-keyframes oscillate {
+    from {
+        -webkit-transform: rotateY(-60deg);
+        -o-transform: rotateY(-60deg);
+        transform: rotateY(-60deg);
+    }
+    to {
+        -webkit-transform: rotateY(60deg);
+        -o-transform: rotateY(60deg);
+        transform: rotateY(60deg);
+    }
+}
+@keyframes oscillate {
+    from {
+      -ms-transform: rotateY(-60deg);
+      -moz-transform: rotateY(-60deg);
+      -webkit-transform: rotateY(-60deg);
+      -o-transform: rotateY(-60deg);
+      transform: rotateY(-60deg);
+    }
+    to {
+      -ms-transform: rotateY(60deg);
+      -moz-transform: rotateY(60deg);
+      -webkit-transform: rotateY(60deg);
+      -o-transform: rotateY(60deg);
+      transform: rotateY(60deg);
+    }
+}
+
+
+//is on:
+.fan.isOn{
+
+    //same in all modes:
+    #fan-body{
+        animation-name: rotating;
+        animation-iteration-count: infinite;
+    }
+
+    //speed:
+    .speed_0{#fan-body{animation-duration: 1.5s;}}
+    .speed_1{#fan-body{animation-duration: 1s;  }}
+    .speed_2{#fan-body{animation-duration: 0.6s;}}
+    .speed_3{#fan-body{animation-duration: 0.3s;}}
+    .speed_4{#fan-body{animation-duration: 0.1s;}}
+
+    //condition:
+    #fan-body.condition_NORMAL  {animation-timing-function: linear;                          }
+    #fan-body.condition_OCEANIC {animation-timing-function: ease-in-out;                     }
+    #fan-body.condition_TROPICAL{animation-timing-function: ease;                            }
+    #fan-body.condition_WOODSY  {animation-timing-function: cubic-bezier(0.5,0.36,0.55,0.84);}
+
+    //oscillating:
+    .oscillating{
+        animation-name: oscillate;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    //oscillating speed!!
+    .speed_0.oscillating{animation-duration: 20s;}
+    .speed_1.oscillating{animation-duration: 15s;}
+    .speed_2.oscillating{animation-duration: 10s;}
+    .speed_3.oscillating{animation-duration: 7s; }
+    .speed_4.oscillating{animation-duration: 4s; }
+
+}

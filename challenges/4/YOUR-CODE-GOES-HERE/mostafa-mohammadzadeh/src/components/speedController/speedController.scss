@@ -1,0 +1,31 @@
+.speedController{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+    padding: 0 10px;
+    > #header{
+        width: 100%;
+        > #title{
+            display: block;
+            text-align: right;
+            color: #333;
+            font-size: 1.5rem;
+        }
+    }
+    .MuiSlider-valueLabel{
+        background-color: #3c859f;
+        padding-bottom: 4px;
+        border-radius: 12px;
+        margin-top: 6px;
+        .label{
+            font-size: 1.3rem;
+        }
+    }::before{
+        display: none;
+    }::after{
+        background: transparent url(../../assets/fourBlades_fff.svg) no-repeat center / 39% auto;
+    }
+}
+
+
