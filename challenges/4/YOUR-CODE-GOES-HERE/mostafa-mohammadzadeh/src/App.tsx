@@ -1,12 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Cookies from 'universal-cookie'
 import PowerButton from './components/powerButton/powerButton'
 import SpeedController from './components/speedController/speedController'
 import ConditionSelector from './components/conditionSelector/conditionSelector'
 import powerIcon from './assets/power.svg'
 import arrowIcon from './assets/arrows-left-right.svg'
-import './stylesheets/App.scss'
 import Fan from './components/fan/fan'
+import './stylesheets/App.scss'
 
+//material ui theme
+declare module '@mui/material/styles' {
+ 
+  interface Theme {
+    direction: React.CSSProperties['direction'];
+  }
+
+  interface Theme {
+    status: {
+      danger: React.CSSProperties['color'];
+    };
+  }
+
+  interface PaletteColor {
+    darker?: string;
+  }
+
+  interface SimplePaletteColorOptions {
+    darker?: string;
+  }
+
+  interface ThemeOptions {
+    status: {
+      danger: React.CSSProperties['color'];
+    };
+  }
+}
+
+//enums:
 enum PowerStatus {
   ON = 'روشن',
   OFF= 'خاموش'
