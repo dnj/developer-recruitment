@@ -1,9 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
 
-class AuthController extends Controller {
-	public function register() {
-	}
+use App\Services\Auth\AuthService;
+
+class AuthController extends Controller
+{
+    protected AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
 
 	public function user() {
 	}
