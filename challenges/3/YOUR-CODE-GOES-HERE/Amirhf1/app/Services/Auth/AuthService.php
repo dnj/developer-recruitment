@@ -16,14 +16,14 @@ class AuthService extends BaseService
      */
     public function register($parameter): User
     {
-        $user            = new User();
+        $user = new User();
         $user->setCellphone($parameter['cellphone']);
         $user->setName($parameter['name']);
         $user->setLastname($parameter['lastname']);
         $user->setPassword(Hash::make($parameter['password']));
-//        dd($user->createToken('api_token'));
-
         $user->save();
+
+        $user['token'] = $user->createToken('api-token')->plainTextToken;
 
         return $user;
     }
