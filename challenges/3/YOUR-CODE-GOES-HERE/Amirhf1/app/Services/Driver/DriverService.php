@@ -20,7 +20,7 @@ class DriverService extends BaseService
     {
         $driver = new Driver();
 
-        return $this->CreateOrUpdateDriver($driver, $parameters);
+        return $this->createOrUpdateDriver($driver, $parameters);
     }
 
     /**
@@ -28,7 +28,7 @@ class DriverService extends BaseService
      * @param array $parameters
      * @return JsonResponse|array
      */
-    public function CreateOrUpdateDriver(Driver $driver, array $parameters): JsonResponse|array
+    public function createOrUpdateDriver(Driver $driver, array $parameters): JsonResponse|array
     {
         if ($this->checkNotExistDriver()) {
 
