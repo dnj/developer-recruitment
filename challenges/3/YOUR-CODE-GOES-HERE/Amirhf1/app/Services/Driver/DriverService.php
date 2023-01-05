@@ -46,8 +46,7 @@ class DriverService extends BaseService
         return response()->json(
             [
                 'code' => 'AlreadyDriver'
-            ],
-            400);
+            ], 400);
     }
 
     public function checkNotExistDriver()
