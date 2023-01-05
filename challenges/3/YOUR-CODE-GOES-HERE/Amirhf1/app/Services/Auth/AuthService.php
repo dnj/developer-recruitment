@@ -21,6 +21,8 @@ class AuthService extends BaseService
         $user->setName($parameter['name']);
         $user->setLastname($parameter['lastname']);
         $user->setPassword(Hash::make($parameter['password']));
+//        dd($user->createToken('api_token'));
+
         $user->save();
 
         return $user;
