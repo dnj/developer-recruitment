@@ -41,3 +41,6 @@ up:
 
 down:
 	@docker-compose down
+
+test:
+	@docker exec -it $(PROJECT_NAME)_php  ./vendor/bin/phpunit
