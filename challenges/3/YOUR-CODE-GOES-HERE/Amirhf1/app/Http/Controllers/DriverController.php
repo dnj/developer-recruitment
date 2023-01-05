@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DriverSignupRequest;
+use App\Http\Requests\DriverUpdateRequest;
 use App\Services\Driver\DriverService;
+use Illuminate\Http\JsonResponse;
 
 class DriverController extends Controller
 {
@@ -20,12 +22,21 @@ class DriverController extends Controller
         $this->driverService = $driverService;
     }
 
+    /**
+     * @param DriverSignupRequest $request
+     * @return array|JsonResponse
+     */
     public function signup(DriverSignupRequest $request)
     {
         return $this->driverService->createDriver($request->toArray());
     }
 
-	public function update()
-	{
-	}
+    /**
+     * @param DriverUpdateRequest $request
+     * @return array|JsonResponse
+     */
+    public function update(DriverUpdateRequest $request)
+    {
+        return $this->driverService->updateDriver($request);
+    }
 }

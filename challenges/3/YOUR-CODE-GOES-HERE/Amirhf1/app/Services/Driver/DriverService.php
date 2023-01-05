@@ -3,12 +3,13 @@
 namespace App\Services\Driver;
 
 use App\Enums\DriverStatus;
+use App\Enums\TravelStatus;
 use App\Http\Resources\Driver\DriverResource;
 use App\Models\Driver;
+use App\Models\Travel;
 use App\Services\BaseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-
 
 class DriverService extends BaseService
 {
@@ -21,6 +22,40 @@ class DriverService extends BaseService
         $driver = new Driver();
 
         return $this->createOrUpdateDriver($driver, $parameters);
+    }
+
+    /**
+     * @param Driver $driver
+     * @param array $parameters
+     * @return JsonResponse|array
+     */
+    public function updateDriver($parameters): JsonResponse|array
+    {
+        $driver = Driver::byUser(auth()->user())->first();
+        if (!$driver) {
+            //if driver not found
+            return response()->json([
+                'code' => 'DriverNotFound'
+            ], 400);
+        }
+        if ($parameters->has('latitude') and $parameters->has('longitude')) {
+            $driver->latitude = $parameters->latitude;
+            $driver->longitude = $parameters->longitude;
+        }
+        $driver->status = $parameters->status;
+        if ($driver->save()) {
+            $travels = Travel::with('spots')
+                ->where('status', TravelStatus::SEARCHING_FOR_DRIVER->value)
+                ->get();
+
+            return response()->json([
+                'driver' => $parameters->all(),
+                'travels' => $travels
+            ]);
+        }
+        return response()->json([
+            'code' => 'DriverNotUpdate'
+        ], 400);
     }
 
     /**
@@ -53,6 +88,5 @@ class DriverService extends BaseService
     {
         return !Driver::query()->where('id', auth()->user()->id)->exists();
     }
-
 
 }
