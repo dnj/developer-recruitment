@@ -44,3 +44,6 @@ down:
 
 test:
 	@docker exec -it $(PROJECT_NAME)_php  ./vendor/bin/phpunit
+
+html:
+	XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html coverage/
