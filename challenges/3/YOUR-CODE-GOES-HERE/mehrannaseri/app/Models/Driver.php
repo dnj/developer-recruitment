@@ -10,16 +10,6 @@ class Driver extends Model
 {
     use HasFactory;
 
-    public static function byUser(User $user): self
-    {
-        return self::query()->findOrFail($user->id);
-    }
-
-    public static function isDriver(User $user): bool
-    {
-        return self::query()->where("id", $user->id)->exists();
-    }
-
     public $incrementing = false;
 
     protected $casts = array(
@@ -38,6 +28,16 @@ class Driver extends Model
         'longitude',
         'status',
     ];
+
+    public static function byUser(User $user): self
+    {
+        return self::query()->findOrFail($user->id);
+    }
+
+    public static function isDriver(User $user): bool
+    {
+        return self::query()->where("id", $user->id)->exists();
+    }
 
     public function user()
     {
