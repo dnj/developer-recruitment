@@ -29,6 +29,18 @@ Code coverage report (HTML)
 make html 
 ```
 
+## Code Style
+
+Improve code style with **[laravel/pint](https://github.com/laravel/pint)**
+
+Show the parts that have problems
+```bash
+make pint-test 
+``` 
+Fix the parts that have problems
+```bash
+make pint  
+```
 
 ## Result 
 ![report.png](misc%2Freport.png)
