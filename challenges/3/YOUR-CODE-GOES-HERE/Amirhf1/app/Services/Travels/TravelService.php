@@ -22,10 +22,10 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class TravelService extends Base
 {
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return JsonResponse
      */
-    public function view(Travel $travel): \Illuminate\Http\JsonResponse
+    public function view(Travel $travel): JsonResponse
     {
         return response()->json(
             ['travel' => ['id' => $travel->id]]
@@ -34,8 +34,9 @@ class TravelService extends Base
 
     public function store($parameter)
     {
-        if (Travel::userHasActiveTravel(auth()->user()))
+        if (Travel::userHasActiveTravel(auth()->user())) {
             throw new ActiveTravelException();
+        }
 
         $travel = new Travel();
         $travel->setPassengerId(auth()->id());
@@ -55,14 +56,15 @@ class TravelService extends Base
             'travel' => [
                 'spots' => $parameter->spots,
                 'passenger_id' => auth()->id(),
-                'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
-            ]
+                'status' => TravelStatus::SEARCHING_FOR_DRIVER->value,
+            ],
         ], ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * @param $travel
      * @return JsonResponse
+     *
      * @throws CannotCancelFinishedTravelException
      * @throws CannotCancelRunningTravelException
      */
@@ -74,7 +76,7 @@ class TravelService extends Base
 
         $travel->update(
             [
-                'status' => TravelStatus::CANCELLED->value
+                'status' => TravelStatus::CANCELLED->value,
             ]
         );
 
@@ -84,6 +86,7 @@ class TravelService extends Base
     /**
      * @param $travel
      * @return void
+     *
      * @throws CannotCancelFinishedTravelException
      * @throws CannotCancelRunningTravelException
      */
@@ -91,24 +94,25 @@ class TravelService extends Base
     {
         $user = auth()->user();
 
-        if ($travel->passengerIsInCar())
+        if ($travel->passengerIsInCar()) {
             throw new CannotCancelRunningTravelException();
+        }
 
-        if ($travel->driverHasArrivedToOrigin() and !Driver::isDriver($user))
+        if ($travel->driverHasArrivedToOrigin() and ! Driver::isDriver($user)) {
             throw new CannotCancelRunningTravelException();
+        }
 
         if ($travel->status->value == TravelStatus::DONE->value
-            or $travel->status->value == TravelStatus::CANCELLED->value)
+            or $travel->status->value == TravelStatus::CANCELLED->value) {
             throw new CannotCancelFinishedTravelException();
-
+        }
     }
 
     public function passengerOnBoard(Travel $travel)
     {
-
         $this->checkTravel($travel);
 
-        if (!$travel->driverHasArrivedToOrigin()) {
+        if (! $travel->driverHasArrivedToOrigin()) {
             throw new CarDoesNotArrivedAtOriginException();
         }
 
@@ -123,7 +127,7 @@ class TravelService extends Base
         $this->createTravelEvent($travel->id, TravelEventType::PASSENGER_ONBOARD->value);
 
         return response()->json([
-            'travel' => $travel->with('events')->first()->toArray()
+            'travel' => $travel->with('events')->first()->toArray(),
         ]);
     }
 
@@ -133,7 +137,7 @@ class TravelService extends Base
 
         $this->checkTravel($travel);
 
-        if (!$travel->allSpotsPassed() &&! $travel->passengerIsInCar()) {
+        if (! $travel->allSpotsPassed() && ! $travel->passengerIsInCar()) {
             throw new AllSpotsDidNotPassException();
         }
 
@@ -142,14 +146,15 @@ class TravelService extends Base
 
         return response()->json(
             [
-                'travel' => $travel->with('events')->first()->toArray()
+                'travel' => $travel->with('events')->first()->toArray(),
             ]
         );
     }
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return void
+     *
      * @throws InvalidTravelStatusForThisActionException
      */
     private function checkTravel(Travel $travel): void
@@ -161,8 +166,7 @@ class TravelService extends Base
     }
 
     /**
-     * @param int $travelId
-     *
+     * @param  int  $travelId
      * @return TravelEvent
      */
     private function createTravelEvent(int $travelId, string $type): TravelEvent
@@ -176,8 +180,9 @@ class TravelService extends Base
     }
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return JsonResponse
+     *
      * @throws ActiveTravelException
      * @throws InvalidTravelStatusForThisActionException
      */
@@ -193,15 +198,16 @@ class TravelService extends Base
         return response()->json([
             'travel' => collect($travel->toArray())->filter(function () {
                 return [
-                    'id', 'driver_id', 'status'
+                    'id', 'driver_id', 'status',
                 ];
-            })
+            }),
         ]);
     }
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return void
+     *
      * @throws InvalidTravelStatusForThisActionException
      */
     public function checkTravelStatus(Travel $travel, $status): void
@@ -211,4 +217,3 @@ class TravelService extends Base
         }
     }
 }
-

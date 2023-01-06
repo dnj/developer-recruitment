@@ -10,7 +10,6 @@ use App\Models\Travel;
 use App\Services\Travels\TravelService;
 use Illuminate\Http\JsonResponse;
 
-
 class TravelController extends Controller
 {
     /**
@@ -19,7 +18,7 @@ class TravelController extends Controller
     protected TravelService $travelService;
 
     /**
-     * @param TravelService $travelService
+     * @param  TravelService  $travelService
      */
     public function __construct(TravelService $travelService)
     {
@@ -27,7 +26,7 @@ class TravelController extends Controller
     }
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return JsonResponse
      */
     public function view(Travel $travel)
@@ -44,8 +43,9 @@ class TravelController extends Controller
     }
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return JsonResponse
+     *
      * @throws CannotCancelFinishedTravelException
      * @throws CannotCancelRunningTravelException
      */

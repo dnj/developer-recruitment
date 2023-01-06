@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
 class DriverService extends BaseService
 {
     /**
-     * @param array $parameters
+     * @param  array  $parameters
      * @return array|JsonResponse
      */
     public function createDriver(array $parameters): JsonResponse|array
@@ -26,8 +26,8 @@ class DriverService extends BaseService
     }
 
     /**
-     * @param Driver $driver
-     * @param array $parameters
+     * @param  Driver  $driver
+     * @param  array  $parameters
      * @return JsonResponse|array
      */
     public function updateDriver($parameters): JsonResponse|array
@@ -46,24 +46,23 @@ class DriverService extends BaseService
 
             return response()->json([
                 'driver' => $parameters->all(),
-                'travels' => $travels
+                'travels' => $travels,
             ]);
         }
 
         return response()->json([
-            'code' => 'DriverNotUpdate'
+            'code' => 'DriverNotUpdate',
         ], 400);
     }
 
     /**
-     * @param Driver $driver
-     * @param array $parameters
+     * @param  Driver  $driver
+     * @param  array  $parameters
      * @return JsonResponse|array
      */
     public function createOrUpdateDriver(Driver $driver, array $parameters): JsonResponse|array
     {
         if ($this->checkNotExistDriver()) {
-
             $driver->setId(auth()->user()->id);
             $driver->setCarPlate($parameters['car_plate']);
             $driver->setCarModel($parameters['car_model']);
@@ -80,7 +79,6 @@ class DriverService extends BaseService
 
     public function checkNotExistDriver()
     {
-        return !Driver::query()->where('id', auth()->user()->id)->exists();
+        return ! Driver::query()->where('id', auth()->user()->id)->exists();
     }
-
 }

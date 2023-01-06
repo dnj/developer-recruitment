@@ -33,7 +33,7 @@ class TravelSpotService extends BaseService
     private TravelSpotStoreRequest $spotStoreRequest;
 
     /**
-     * @param Travel $travel
+     * @param  Travel  $travel
      * @return TravelSpotService
      */
     public function setTravel(Travel $travel): TravelSpotService
@@ -44,8 +44,7 @@ class TravelSpotService extends BaseService
     }
 
     /**
-     * @param TravelSpot $travelSpot
-     *
+     * @param  TravelSpot  $travelSpot
      * @return TravelSpotService
      */
     public function setTravelSpot(TravelSpot $travelSpot): TravelSpotService
@@ -56,8 +55,7 @@ class TravelSpotService extends BaseService
     }
 
     /**
-     * @param TravelSpotStoreRequest $spotStoreRequest
-     *
+     * @param  TravelSpotStoreRequest  $spotStoreRequest
      * @return TravelSpotService
      */
     public function setSpotStoreRequest(TravelSpotStoreRequest $spotStoreRequest): TravelSpotService
@@ -69,6 +67,7 @@ class TravelSpotService extends BaseService
 
     /**
      * @return JsonResponse
+     *
      * @throws InvalidTravelStatusForThisActionException
      * @throws SpotAlreadyPassedException
      */
@@ -81,12 +80,13 @@ class TravelSpotService extends BaseService
             'travel' => $this->travel
                 ->with('spots')
                 ->first()
-                ->toArray()
+                ->toArray(),
         ]);
     }
 
     /**
      * @return JsonResponse
+     *
      * @throws InvalidTravelStatusForThisActionException
      * @throws SpotAlreadyPassedException
      */
@@ -98,13 +98,13 @@ class TravelSpotService extends BaseService
         if ($this->positionLessThen($this->spotStoreRequest->get('position'), $maxPositions)) {
             return response()->json([
                 'errors' => [
-                    'position' => 'error'
-                ]
+                    'position' => 'error',
+                ],
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $position = ($this->getBaseQueryOfPosition($travel, $this->spotStoreRequest->get('position')));
-        if (!$position->exists()){
+        if (! $position->exists()) {
             throw new SpotAlreadyPassedException();
         }
 
@@ -112,7 +112,7 @@ class TravelSpotService extends BaseService
         $this->createTravelSpot($travel->id, $this->spotStoreRequest);
 
         return response()->json([
-            'travel' => $travel->with('spots')->first()->toArray()
+            'travel' => $travel->with('spots')->first()->toArray(),
         ]);
     }
 
@@ -138,17 +138,16 @@ class TravelSpotService extends BaseService
             ->decrement('position');
 
         return response()->json([
-            'travel' => $travel->with('spots')->first()->toArray()
+            'travel' => $travel->with('spots')->first()->toArray(),
         ]);
     }
-
 
     /**
      * @return TravelSpotService
      *
      * @throws InvalidTravelStatusForThisActionException
      */
-    public function checkTravelStatus() : TravelSpotService
+    public function checkTravelStatus(): TravelSpotService
     {
         if ($this->travel->status == TravelStatus::CANCELLED) {
             throw new InvalidTravelStatusForThisActionException();
@@ -158,7 +157,7 @@ class TravelSpotService extends BaseService
     }
 
     /**
-     * @param string $pointer
+     * @param  string  $pointer
      * @return $this
      */
     public function checkTravelUserId(string $pointer): TravelSpotService
@@ -170,14 +169,14 @@ class TravelSpotService extends BaseService
         return $this;
     }
 
-
     /**
      * @return $this
+     *
      * @throws SpotAlreadyPassedException
      */
     public function isSpotAlreadyPassed(): TravelSpotService
     {
-        if (! is_null($this->travelSpot->arrived_at)){
+        if (! is_null($this->travelSpot->arrived_at)) {
             throw new SpotAlreadyPassedException();
         }
 
@@ -185,9 +184,8 @@ class TravelSpotService extends BaseService
     }
 
     /**
-     * @param int $position
-     * @param int $lastPositions
-     *
+     * @param  int  $position
+     * @param  int  $lastPositions
      * @return bool
      */
     private function positionLessThen(int $position, mixed $lastPositions): bool
@@ -195,27 +193,22 @@ class TravelSpotService extends BaseService
         return $position > $lastPositions;
     }
 
-
     /**
-     * @param Travel $travel
-     * @param int $position
-     *
+     * @param  Travel  $travel
+     * @param  int  $position
      * @return HasMany
      */
     private function getBaseQueryOfPosition(Travel $travel, int $position): HasMany
     {
         return $travel
             ->spots()
-            ->where('position','>=', $position)
-            ->whereNull('arrived_at')
-            ;
+            ->where('position', '>=', $position)
+            ->whereNull('arrived_at');
     }
 
-
     /**
-     * @param int $travelId
-     * @param TravelSpotStoreRequest $request
-     *
+     * @param  int  $travelId
+     * @param  TravelSpotStoreRequest  $request
      * @return TravelSpot
      */
     private function createTravelSpot(int $travelId, TravelSpotStoreRequest $request): TravelSpot

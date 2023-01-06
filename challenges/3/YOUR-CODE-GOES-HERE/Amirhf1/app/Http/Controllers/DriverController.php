@@ -15,7 +15,7 @@ class DriverController extends Controller
     protected DriverService $driverService;
 
     /**
-     * @param DriverService $driverService
+     * @param  DriverService  $driverService
      */
     public function __construct(DriverService $driverService)
     {
@@ -23,7 +23,7 @@ class DriverController extends Controller
     }
 
     /**
-     * @param DriverSignupRequest $request
+     * @param  DriverSignupRequest  $request
      * @return array|JsonResponse
      */
     public function signup(DriverSignupRequest $request)
@@ -32,7 +32,7 @@ class DriverController extends Controller
     }
 
     /**
-     * @param DriverUpdateRequest $request
+     * @param  DriverUpdateRequest  $request
      * @return array|JsonResponse
      */
     public function update(DriverUpdateRequest $request)

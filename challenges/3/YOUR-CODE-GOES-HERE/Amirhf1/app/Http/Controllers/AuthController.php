@@ -17,7 +17,6 @@ class AuthController extends Controller
 
     protected UserService $userService;
 
-
     public function __construct(AuthService $authService, UserService $userService)
     {
         $this->authService = $authService;
@@ -25,7 +24,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param RegisterRequest $request
+     * @param  RegisterRequest  $request
      * @return JsonResponse
      */
     public function register(RegisterRequest $request)
@@ -43,6 +42,6 @@ class AuthController extends Controller
 
         $this->userService->user($user);
 
-        return (new UserResource($user));
+        return new UserResource($user);
     }
 }

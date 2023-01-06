@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService extends BaseService
 {
-
-
     /**
      * @param $parameter
      * @return User
@@ -27,5 +25,4 @@ class AuthService extends BaseService
 
         return $user;
     }
-
 }

@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 
 class TravelSpotController extends Controller
 {
-
     /**
      * @var TravelSpotService
      */
@@ -25,9 +24,10 @@ class TravelSpotController extends Controller
     }
 
     /**
-     * @param Travel $travel
-     * @param TravelSpot $spot
+     * @param  Travel  $travel
+     * @param  TravelSpot  $spot
      * @return JsonResponse
+     *
      * @throws InvalidTravelStatusForThisActionException
      * @throws SpotAlreadyPassedException
      */
@@ -43,9 +43,10 @@ class TravelSpotController extends Controller
     }
 
     /**
-     * @param Travel $travel
-     * @param TravelSpotStoreRequest $request
+     * @param  Travel  $travel
+     * @param  TravelSpotStoreRequest  $request
      * @return JsonResponse
+     *
      * @throws InvalidTravelStatusForThisActionException
      * @throws SpotAlreadyPassedException
      */
@@ -60,9 +61,10 @@ class TravelSpotController extends Controller
     }
 
     /**
-     * @param Travel $travel
-     * @param TravelSpot $spot
+     * @param  Travel  $travel
+     * @param  TravelSpot  $spot
      * @return JsonResponse
+     *
      * @throws InvalidTravelStatusForThisActionException
      * @throws SpotAlreadyPassedException
      * @throws ProtectedSpotException
