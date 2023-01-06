@@ -29,8 +29,20 @@ class TravelController extends Controller
 
 	}
 
-	public function cancel()
+	public function cancel($travel_id)
 	{
+        $passenger = auth()->user();
+
+        $travel = Travel::searchingForDriver()
+            ->where('passenger_id', $passenger->id)
+            ->findOrFail($travel_id);
+
+        $travel->update([
+            'status' => TravelStatus::CANCELLED->value
+        ]);
+
+        return response()->json(TravelResource::make($travel));
+
 	}
 
 	public function passengerOnBoard()
