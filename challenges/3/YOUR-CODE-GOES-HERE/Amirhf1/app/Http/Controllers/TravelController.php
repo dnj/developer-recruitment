@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ActiveTravelException;
+use App\Exceptions\CannotCancelFinishedTravelException;
+use App\Exceptions\CannotCancelRunningTravelException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Models\Travel;
 use App\Services\Travels\TravelService;
@@ -41,6 +43,12 @@ class TravelController extends Controller
         return $this->travelService->store($request);
     }
 
+    /**
+     * @param Travel $travel
+     * @return JsonResponse
+     * @throws CannotCancelFinishedTravelException
+     * @throws CannotCancelRunningTravelException
+     */
     public function cancel(Travel $travel)
     {
         return $this->travelService->cancel($travel);
