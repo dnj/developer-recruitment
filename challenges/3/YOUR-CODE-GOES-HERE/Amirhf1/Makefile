@@ -47,3 +47,9 @@ test:
 
 html:
 	XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html coverage/
+
+pint:
+	./vendor/bin/pint
+
+pint-test:
+	./vendor/bin/pint --test
