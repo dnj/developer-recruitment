@@ -17,6 +17,8 @@ class TravelEvent extends Model
         'type' => TravelEventType::class,
     );
 
+    protected $guarded = ['id'];
+
     public function travel()
     {
         return $this->belongsTo(Travel::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
@@ -11,8 +12,9 @@ use App\Models\Travel;
 class TravelController extends Controller
 {
 
-	public function view()
+	public function view(Travel $travel)
 	{
+        return response()->json(TravelResource::make($travel));
 	}
 
 	public function store(TravelStoreRequest $request)
@@ -50,8 +52,27 @@ class TravelController extends Controller
 
 	}
 
-	public function passengerOnBoard()
+	public function passengerOnBoard(Travel $travel)
 	{
+        $driver = auth()->user();
+        $travel->loadMissing(['events', 'spots']);
+
+        if(! Driver::isDriver($driver))
+            return response()->json([], 403);
+
+        if($travel->passengerIsInCar() or $travel->status != TravelStatus::RUNNING){
+            return response()->json(['code' => 'InvalidTravelStatusForThisAction'], 400);
+        }
+
+        if(! $travel->driverHasArrivedToOrigin())
+            return response()->json(['code' => 'CarDoesNotArrivedAtOrigin'], 400);
+
+        $travel->events()->create([
+            'type' => TravelEventType::PASSENGER_ONBOARD->value
+        ]);
+
+        return response()->json(TravelResource::make($travel));
+
 	}
 
 	public function done()
