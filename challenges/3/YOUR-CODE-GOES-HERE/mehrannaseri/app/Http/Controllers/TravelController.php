@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
+use App\Exceptions\ActiveTravelException;
+use App\Exceptions\AllSpotsDidNotPassException;
+use App\Exceptions\CannotCancelFinishedTravelException;
+use App\Exceptions\CannotCancelRunningTravelException;
+use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Models\Driver;
@@ -21,6 +26,9 @@ class TravelController extends Controller
 	{
         $passenger = auth()->user();
 
+        if(Travel::userHasActiveTravel($passenger))
+            throw new ActiveTravelException();
+
         $travel = Travel::create([
             'passenger_id' => $passenger->id,
             'status' => TravelStatus::SEARCHING_FOR_DRIVER->value
@@ -36,19 +44,13 @@ class TravelController extends Controller
 	{
         $travel = Travel::findOrFail($travel_id);
 
-        list($can_not_cancel, $message) = $this->CanNotCancelTravel($travel);
-        if($can_not_cancel){
-            return response()->json(['code' => $message], 400);
-        }
-        else{
-            $travel->update([
-                'status' => TravelStatus::CANCELLED->value
-            ]);
+        $this->CanNotCancelTravel($travel);
 
-            return response()->json(TravelResource::make($travel));
-        }
+        $travel->update([
+            'status' => TravelStatus::CANCELLED->value
+        ]);
 
-
+        return response()->json(TravelResource::make($travel));
 
 	}
 
@@ -61,7 +63,7 @@ class TravelController extends Controller
             return response()->json([], 403);
 
         if($travel->passengerIsInCar() or $travel->status != TravelStatus::RUNNING){
-            return response()->json(['code' => 'InvalidTravelStatusForThisAction'], 400);
+            throw new InvalidTravelStatusForThisActionException();
         }
 
         if(! $travel->driverHasArrivedToOrigin())
@@ -75,31 +77,54 @@ class TravelController extends Controller
 
 	}
 
-	public function done()
+	public function done(Travel $travel)
 	{
+        $driver = auth()->user();
+        $travel->loadMissing(['spots', 'events']);
+
+        if($travel->events->pluck('type')->contains(TravelEventType::DONE))
+            throw new InvalidTravelStatusForThisActionException();
+
+        if(! Driver::isDriver($driver))
+            return response()->json([], 403);
+
+        if(! $travel->allSpotsPassed())
+            throw new AllSpotsDidNotPassException();
+
+        $travel->events()->create(['type' => TravelEventType::DONE]);
+        $travel->update(['status' => TravelStatus::DONE]);
+
+
+        return response()->json(TravelResource::make($travel));
 	}
 
-	public function take()
+	public function take(Travel $travel)
 	{
+        $driver  = auth()->user();
+
+        if($travel->status == TravelStatus::CANCELLED)
+            throw new InvalidTravelStatusForThisActionException();
+
+        if($travel->userHasActiveTravel($driver))
+            throw new ActiveTravelException();
+
+        $travel->update(['driver_id' => $driver->id]);
+
+        return response()->json(TravelResource::make($travel));
 	}
 
     private function CanNotCancelTravel($travel)
     {
         $user = auth()->user();
-        $can_not_cancel = false;
-        $message = '';
 
-        if(in_array($travel->status->value, [TravelStatus::CANCELLED->value, TravelStatus::DONE->value])){
-            $message = 'CannotCancelFinishedTravel';
-            $can_not_cancel = true;
-        }
+        if($travel->passengerIsInCar())
+            throw new CannotCancelRunningTravelException();
 
-        if($travel->status->value == TravelStatus::RUNNING->value
-            and $travel->driverHasArrivedToOrigin() and ! Driver::isDriver($user) ){
-            $message = 'CannotCancelRunningTravel';
-            $can_not_cancel = true;
-        }
+        if($travel->driverHasArrivedToOrigin() and ! Driver::isDriver($user))
+            throw new CannotCancelRunningTravelException();
 
-        return [$can_not_cancel, $message];
+        if($travel->status->value == TravelStatus::DONE->value
+            or $travel->status->value == TravelStatus::CANCELLED->value)
+            throw new CannotCancelFinishedTravelException();
     }
 }
