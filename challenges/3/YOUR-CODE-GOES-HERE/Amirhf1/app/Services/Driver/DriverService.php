@@ -33,12 +33,7 @@ class DriverService extends BaseService
     public function updateDriver($parameters): JsonResponse|array
     {
         $driver = Driver::byUser(auth()->user())->first();
-        if (!$driver) {
-            //if driver not found
-            return response()->json([
-                'code' => 'DriverNotFound'
-            ], 400);
-        }
+
         if ($parameters->has('latitude') and $parameters->has('longitude')) {
             $driver->latitude = $parameters->latitude;
             $driver->longitude = $parameters->longitude;
@@ -54,6 +49,7 @@ class DriverService extends BaseService
                 'travels' => $travels
             ]);
         }
+
         return response()->json([
             'code' => 'DriverNotUpdate'
         ], 400);
@@ -80,11 +76,6 @@ class DriverService extends BaseService
         }
 
         throw new AlreadyDriverException();
-
-        return response()->json(
-            [
-                'code' => 'AlreadyDriver'
-            ], 400);
     }
 
     public function checkNotExistDriver()
