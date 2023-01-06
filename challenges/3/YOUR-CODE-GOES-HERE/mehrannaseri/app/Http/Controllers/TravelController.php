@@ -8,6 +8,7 @@ use App\Exceptions\ActiveTravelException;
 use App\Exceptions\AllSpotsDidNotPassException;
 use App\Exceptions\CannotCancelFinishedTravelException;
 use App\Exceptions\CannotCancelRunningTravelException;
+use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
@@ -67,7 +68,7 @@ class TravelController extends Controller
         }
 
         if(! $travel->driverHasArrivedToOrigin())
-            return response()->json(['code' => 'CarDoesNotArrivedAtOrigin'], 400);
+            throw new CarDoesNotArrivedAtOriginException();
 
         $travel->events()->create([
             'type' => TravelEventType::PASSENGER_ONBOARD->value
