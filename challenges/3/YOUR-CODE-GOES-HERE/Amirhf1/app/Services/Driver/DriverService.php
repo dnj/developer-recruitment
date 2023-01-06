@@ -4,6 +4,7 @@ namespace App\Services\Driver;
 
 use App\Enums\DriverStatus;
 use App\Enums\TravelStatus;
+use App\Exceptions\AlreadyDriverException;
 use App\Http\Resources\Driver\DriverResource;
 use App\Models\Driver;
 use App\Models\Travel;
@@ -77,6 +78,8 @@ class DriverService extends BaseService
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
         }
+
+        throw new AlreadyDriverException();
 
         return response()->json(
             [

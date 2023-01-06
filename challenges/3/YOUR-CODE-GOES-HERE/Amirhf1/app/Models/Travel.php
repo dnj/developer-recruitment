@@ -93,14 +93,6 @@ class Travel extends Model
     }
 
     /**
-     * @return int
-     */
-    public function getPassengerId(): int
-    {
-        return $this->passenger_id;
-    }
-
-    /**
      * @param int $passenger_id
      */
     public function setPassengerId(int $passenger_id): void
@@ -109,51 +101,11 @@ class Travel extends Model
     }
 
     /**
-     * @return int
-     */
-    public function getDriverId(): int
-    {
-        return $this->driver_id;
-    }
-
-    /**
-     * @param int $driver_id
-     */
-    public function setDriverId(int $driver_id): void
-    {
-        $this->driver_id = $driver_id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    /**
      * @param string $status
      */
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updated_at;
     }
 
     /**

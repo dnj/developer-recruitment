@@ -60,27 +60,11 @@ class Driver extends Model
     }
 
     /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
      * @param int $id
      */
     public function setId(int $id): void
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCarModel(): string
-    {
-        return $this->car_model;
     }
 
     /**
@@ -92,14 +76,6 @@ class Driver extends Model
     }
 
     /**
-     * @return string
-     */
-    public function getCarPlate(): string
-    {
-        return $this->car_plate;
-    }
-
-    /**
      * @param string $car_plate
      */
     public function setCarPlate(string $car_plate): void
@@ -108,67 +84,11 @@ class Driver extends Model
     }
 
     /**
-     * @return float
-     */
-    public function getLatitude(): float
-    {
-        return $this->latitude;
-    }
-
-    /**
-     * @param float $latitude
-     */
-    public function setLatitude(float $latitude): void
-    {
-        $this->latitude = $latitude;
-    }
-
-    /**
-     * @return float
-     */
-    public function getLongitude(): float
-    {
-        return $this->longitude;
-    }
-
-    /**
-     * @param float $longitude
-     */
-    public function setLongitude(float $longitude): void
-    {
-        $this->longitude = $longitude;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    /**
      * @param string $status
      */
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updated_at;
     }
 
 }
