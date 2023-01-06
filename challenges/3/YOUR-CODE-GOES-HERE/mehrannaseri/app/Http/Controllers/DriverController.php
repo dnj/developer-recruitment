@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DriverStatus;
+use App\Exceptions\AlreadyDriverException;
 use App\Http\Requests\DriverSignupRequest;
 use App\Http\Requests\DriverUpdateRequest;
 use App\Http\Resources\DriverResource;
@@ -28,7 +29,7 @@ class DriverController extends Controller
 	{
         //checking user is driver
         if(Driver::isDriver($this->user))
-            return response()->json([ "code" => "AlreadyDriver"], 400);
+            throw new AlreadyDriverException();
 
         $driver = $this->user->driver()->create([
             'car_model' => $request->car_model,
