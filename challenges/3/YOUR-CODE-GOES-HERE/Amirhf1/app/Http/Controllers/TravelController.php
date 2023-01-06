@@ -54,15 +54,18 @@ class TravelController extends Controller
         return $this->travelService->cancel($travel);
     }
 
-    public function passengerOnBoard()
+    public function passengerOnBoard(Travel $travel)
     {
+        return $this->travelService->passengerOnBoard($travel);
     }
 
-    public function done()
+    public function done(Travel $travel)
     {
+        return $this->travelService->done($travel);
     }
 
-    public function take()
+    public function take(Travel $travel)
     {
+        return $this->travelService->take($travel);
     }
 }

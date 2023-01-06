@@ -156,4 +156,26 @@ class Travel extends Model
         return $this->updated_at;
     }
 
+    /**
+     * @return Travel
+     */
+    public function setStatusDone(): Travel
+    {
+        $this->setStatus(TravelStatus::DONE->value);
+        $this->save();
+
+        return $this->refresh();
+    }
+
+    /**
+     * @return Travel
+     */
+    public function assignDriverId(int $userId): Travel
+    {
+        $this->driver_id = $userId;
+        $this->save();
+
+        return $this->refresh();
+    }
+
 }
