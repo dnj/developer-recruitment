@@ -16,6 +16,8 @@ class Travel extends Model
         'status' => TravelStatus::class,
     );
 
+    protected $guarded = ['id'];
+
     public static function userHasActiveTravel(User $user): bool {
         return self::query()
             ->whereIn("status", [TravelStatus::RUNNING, TravelStatus::SEARCHING_FOR_DRIVER])

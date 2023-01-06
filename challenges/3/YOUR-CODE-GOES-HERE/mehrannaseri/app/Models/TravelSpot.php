@@ -11,6 +11,8 @@ class TravelSpot extends Model
 
     protected $table = "travels_spots";
 
+    protected $guarded = ['id'];
+
     public function travel() {
         return $this->belongsTo(Travel::class);
     }
