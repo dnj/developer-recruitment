@@ -18,7 +18,7 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cellphone' => ['required', 'regex:/^09\d{9}$/'],
+            'cellphone' => ['required', 'regex:/^09\d{9}$/', 'unique:users,cellphone'],
             'name' => ['required'],
             'lastname' => ['required'],
             'password' => ['required', 'min:6'],
