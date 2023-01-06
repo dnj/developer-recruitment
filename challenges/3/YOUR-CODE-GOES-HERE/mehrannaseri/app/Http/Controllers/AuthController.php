@@ -22,5 +22,10 @@ class AuthController extends Controller {
 	}
 
 	public function user() {
+        $user = auth()->user();
+
+        return response()->json([
+            'user' => UserResource::make($user)
+        ]);
 	}
 }
