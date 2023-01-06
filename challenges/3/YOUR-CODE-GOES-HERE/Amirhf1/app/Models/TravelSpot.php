@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 /**
@@ -24,6 +25,14 @@ class TravelSpot extends Model
     use HasFactory;
 
     protected $table = "travels_spots";
+
+    /**
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
 
     public function travel() {
         return $this->belongsTo(Travel::class);
@@ -131,5 +140,16 @@ class TravelSpot extends Model
     public function getUpdatedAt(): \DateTime
     {
         return $this->updated_at;
+    }
+
+    /**
+     * @param Carbon $carbon
+     * @return $this
+     */
+    public function setArrivedAt(Carbon $carbon): static
+    {
+        $this->arrived_at = $carbon;
+
+        return $this;
     }
 }
