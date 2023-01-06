@@ -24,6 +24,8 @@ class Travel extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['status'];
+
     public static function userHasActiveTravel(User $user): bool
     {
         return self::query()
