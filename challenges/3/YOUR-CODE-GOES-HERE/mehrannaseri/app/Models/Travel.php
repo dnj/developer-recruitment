@@ -11,6 +11,11 @@ class Travel extends Model
 {
     use HasFactory;
 
+    protected $table = "travels";
+    protected $casts = array(
+        'status' => TravelStatus::class,
+    );
+
     public static function userHasActiveTravel(User $user): bool {
         return self::query()
             ->whereIn("status", [TravelStatus::RUNNING, TravelStatus::SEARCHING_FOR_DRIVER])
@@ -20,11 +25,6 @@ class Travel extends Model
             })
             ->exists();
     }
-
-    protected $table = "travels";
-    protected $casts = array(
-        'status' => TravelStatus::class,
-    );
 
     public function passenger()
     {
@@ -63,5 +63,10 @@ class Travel extends Model
         return $this->spots()
             ->where("position", 0)
             ->firstOrFail();
+    }
+
+    public function scopeSearchingForDriver($query)
+    {
+        return $query->where('status', TravelStatus::SEARCHING_FOR_DRIVER->value);
     }
 }
