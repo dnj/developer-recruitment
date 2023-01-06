@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: "${PROJECT_NAME}_nginx"
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www/vhost/developer:cached
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    working_dir: /var/www/vhost/
+    ports:
+      - '443:443'
+      - '9008:9008'
+    networks:
+      - developer
+
+  app:
+    container_name: "${PROJECT_NAME}_php"
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    environment:
+      PHP_MEMORY_LIMIT: '512M'
+      COMPOSER_MEMORY_LIMIT: '-1'
+    user: 501:501
+    volumes:
+      - ./:/var/www/vhost/developer:cached
+    working_dir: /var/www/vhost/developer
+    ports:
+      - '9003:9003'
+    networks:
+      - developer
+
+  redis:
+    image: redis:latest
+    container_name: "${PROJECT_NAME}_redis"
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'developer_redis:/data'
+    networks:
+      - developer
+
+  mysql:
+    image: mariadb:latest
+    container_name: "${PROJECT_NAME}_mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    volumes:
+      - 'developer_mysql:/data'
+    ports:
+      - '${FORWARD_DB_PORT:-4406}:3306'
+    networks:
+      - developer
+
+networks:
+  developer:
+    driver: bridge
+
+volumes:
+  developer_mysql:
+    driver: local
+
+  developer_redis:
+    driver: local

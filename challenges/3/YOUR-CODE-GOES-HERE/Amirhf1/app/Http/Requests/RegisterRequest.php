@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Driver;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DriverSignupRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
 
     public function authorize(): bool
@@ -19,8 +18,10 @@ class DriverSignupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_plate' => ['required', 'regex:/^[1-9]{2}[بجدژسصطقلتع][1-9]{5}$/u'],
-            'car_plate' => ['required'],
+            'cellphone' => ['required', 'regex:/^09\d{9}$/'],
+            'name' => ['required'],
+            'lastname' => ['required'],
+            'password' => ['required', 'min:6'],
         ];
     }
 }
