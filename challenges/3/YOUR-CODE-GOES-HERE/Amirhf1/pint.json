@@ -1,0 +1,15 @@
+{
+    "exclude": [
+        "app/Enums/",
+        "app/Exceptions/",
+        "app/Http/Requests/",
+        "app/Http/Requests/",
+        "app/Models/",
+        "app/Policies/",
+        "config/",
+        "database/",
+        "app/Http/Resources/",
+        "routes/",
+        "tests/"
+    ]
+}
