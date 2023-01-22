@@ -130,7 +130,7 @@ What we expect that you learn from us:
 - Latest ReactJS version and/or VueJS 3
 - SASS/SCSS/LESS
 - ES6 Javascript or Typescript (highly recommended.)
-- Try to keep it simple and do not use additional libraries but there is no hard limit.
+- Try to keep it simple and do not use additional libraries but there is no hard limit. (See: [KISS](https://en.wikipedia.org/wiki/KISS_principle))
 
 
 <p align="center">
