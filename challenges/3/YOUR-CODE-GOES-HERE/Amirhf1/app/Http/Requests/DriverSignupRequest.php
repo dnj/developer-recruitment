@@ -20,7 +20,7 @@ class DriverSignupRequest extends FormRequest
     {
         return [
             'car_plate' => ['required', 'regex:/^[1-9]{2}[بجدژسصطقلتع][1-9]{5}$/u'],
-            'car_plate' => ['required'],
+            'car_model' => ['required'],
         ];
     }
 }
